@@ -12,6 +12,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
+  // const navigate = useNavigate();
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
@@ -20,7 +21,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const config = { header: { "Content-Type": "multipart/form-data" } };
+    const config = { headers: { "Content-Type": "multipart/form-data" } };
     const newForm = new FormData();
     newForm.append("file", avatar);
     newForm.append("name", name);
@@ -30,6 +31,8 @@ function Login() {
       .post(`${server}/api/v2/user/create-user`, newForm, config)
       .then((res) => {
         console.log(res);
+        // alert(res.data.message);
+        // navigate("/");
       })
       .catch((err) => {
         console.log(err);
