@@ -11,23 +11,15 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const user = require("../model/user");
 const sendToken = require("../utils/jwtToken");
 
-router.post("/create-user", upload.single("file"), async (req, res, next) => {
+router.post("/create-user", async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, avatar } = req.body;
     const userEmail = await User.findOne({ email });
+
     if (userEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({ message: "Error deleting file" });
-        } else {
-          res.json({ message: "File deleted successfully" });
-        }
-      });
       return next(new ErrorHandler("User already exists", 400));
     }
+
     const filename = req.file.filename;
     const fileUrl = path.join("uploads", filename);
     const user = {
@@ -39,8 +31,11 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
         url: fileUrl,
       },
     };
+
     const activationToken = createActivationToken(user);
+
     const activationUrl = `http://localhost:5173/activation/${activationToken}`;
+
     try {
       await sendMail({
         email: user.email,
@@ -69,24 +64,37 @@ router.post(
   "/activation",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const activtion_token = req.body;
+      const { activtion_token } = req.body;
+
       const newUser = jwt.verify(
         activtion_token,
         process.env.ACTIVATION_SECRET
       );
+
       if (!newUser) {
         return next(new ErrorHandler("Invalid token", 400));
       }
+
       const { name, email, password, avatar } = newUser;
-      User.create({
+
+      let user = await User.findOne({ email });
+
+      if (user) {
+        return next(new ErrorHandler("User already exists", 400));
+      }
+
+      user = await User.create({
         name,
         email,
         avatar,
         password,
       });
 
-      sendToken(newUser, 201, res);
-    } catch (error) {}
+      sendToken(user, 201, res);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      return next(new ErrorHandler(error.message, 500));
+    }
   })
 );
 
