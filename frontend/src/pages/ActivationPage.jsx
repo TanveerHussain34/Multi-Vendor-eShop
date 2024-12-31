@@ -11,7 +11,7 @@ function ActivationPage() {
     if (activation_token) {
       const sendRequest = async () => {
         await axios
-          .post(`${server}/user/activation`, {
+          .post(`${server}/activation`, {
             activation_token,
           })
           .then((res) => {
