@@ -5,30 +5,41 @@ import { server } from "../server";
 
 function ActivationPage() {
   const { activation_token } = useParams();
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     if (activation_token) {
       const sendRequest = async () => {
-        await axios
-          .post(`${server}/activation`, {
+        try {
+          const response = await axios.post(`${server}/activation`, {
             activation_token,
-          })
-          .then((res) => {
-            console.log(res);
-          })
-          .catch(() => {
-            setError(true);
           });
+          console.log("Activation successful:", response.data);
+          setError(false);
+        } catch (err) {
+          console.error(
+            "Error activating account:",
+            err.response?.data || err.message
+          );
+          setError(true);
+        } finally {
+          setLoading(false);
+        }
       };
       sendRequest();
+    } else {
+      setLoading(false);
+      setError(true);
     }
-  }, []);
+  }, [activation_token]);
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
-      {error ? (
-        <p>Your token is expired!</p>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Your token is expired or invalid!</p>
       ) : (
         <p>Your account has been created successfully!</p>
       )}

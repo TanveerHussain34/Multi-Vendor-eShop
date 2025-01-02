@@ -2,10 +2,11 @@ import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
 import axios from "axios";
 import { server } from "../../server";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 function Login() {
   const [name, setName] = useState("");
@@ -13,6 +14,8 @@ function Login() {
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
+  // const navigate = useNavigate();
+
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
     setAvatar(file);
@@ -21,31 +24,68 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("avatar", avatar);
+    const config = { headers: { "Content-Type": "multipart/form-data" } };
 
-    try {
-      const res = await axios.post(`${server}/create-user`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+    const newForm = new FormData();
+
+    newForm.append("name", name);
+    newForm.append("email", email);
+    newForm.append("password", password);
+    newForm.append("file", avatar);
+
+    // try {
+    await axios
+      .post(`${server}/create-user`, newForm, config)
+      .then((res) => {
+        // console.log(res);
+        // if (res.data.success) {
+        // navigate("/");
+        alert(res.data.message);
+        // }
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      toast.success(res.data.message || "User created successfully");
-      setName("");
-      setEmail("");
-      setPassword("");
-      setAvatar(null);
-    } catch (error) {
-      if (error.response) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("Something went wrong.");
-      }
-    }
+
+    // toast.success(res.data.message || "User created successfully");
+
+    // Reset form fields
+    // setName("");
+    // setEmail("");
+    // setPassword("");
+    // setAvatar(null);
+    //   } catch (error) {
+    //     if (error.response && error.response.data) {
+    //       toast.error(error.response.data.message);
+    //     } else {
+    //       toast.error("Something went wrong.");
+    //     }
+    //   }
   };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const res = await axios.post(`${server}/create-user`, {
+  //       name,
+  //       email,
+  //       password,
+  //       avatar,
+  //     });
+  //     toast.success(res.data.message || "User created successfully");
+  //     setName("");
+  //     setEmail("");
+  //     setPassword("");
+  //     setAvatar(null);
+  //   } catch (error) {
+  //     if (error.response) {
+  //       toast.error(error.response.data.message);
+  //     } else {
+  //       toast.error("Something went wrong.");
+  //     }
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 ">
