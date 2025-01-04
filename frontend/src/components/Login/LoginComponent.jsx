@@ -16,9 +16,13 @@ function Login() {
     e.preventDefault();
 
     axios
-      .post(`${server}/login-user`, { email, password })
-      .then((res) => {
-        toast.success(res.data.message);
+      .post(
+        `${server}/login-user`,
+        { email, password },
+        { withCredentials: true }
+      )
+      .then(() => {
+        toast.success("Login successful!");
         navigate("/");
       })
       .catch((err) => {
