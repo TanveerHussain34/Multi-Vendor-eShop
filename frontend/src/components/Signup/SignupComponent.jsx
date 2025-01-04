@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
 import axios from "axios";
 import { server } from "../../server";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 function Login() {
   const [name, setName] = useState("");
@@ -40,11 +40,15 @@ function Login() {
         // console.log(res);
         // if (res.data.success) {
         // navigate("/");
-        alert(res.data.message);
-        // }
+        toast.success(res.data.message);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setAvatar(null);
       })
       .catch((err) => {
         console.log(err);
+        toast.error(err.response.data.message);
       });
 
     // toast.success(res.data.message || "User created successfully");
