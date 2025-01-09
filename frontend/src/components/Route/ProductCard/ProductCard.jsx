@@ -109,7 +109,7 @@ function ProductCard({ data }) {
           <AiOutlineShoppingCart
             size={25}
             className="absolute cursor-pointer right-2 top-24"
-            onClick={() => setOpen(!open)}
+            // onClick={() => addToCartHandler(data._id)} written this line from github nothing else
             color={"#444"}
             title="Add to Cart"
           />
