@@ -33,7 +33,7 @@ function EventCard() {
             </h5>
           </div>
           <span className="pr-3 font-[400] text-[17px] text-[#44a55e]">
-            120 Sold Out
+            120 sold
           </span>
         </div>
         <CountDown />

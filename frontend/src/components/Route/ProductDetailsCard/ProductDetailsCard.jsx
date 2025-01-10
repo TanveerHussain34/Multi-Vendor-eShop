@@ -57,7 +57,7 @@ function ProductDetailsCard({ open, setOpen, data }) {
                   </span>
                 </div>
                 <h5 className="text-[16px] text-[red] mt-5">
-                  ({data.total_sell}) Sold Out
+                  ({data.total_sell}) sold
                 </h5>
               </div>
               <div className="w-full 800px:w-[50%] pt-5 pl-[5px] pr-[5px]">

@@ -75,7 +75,7 @@ function ProductCard({ data }) {
               </h4>
             </div>
             <span className="font-[400] text-[17px] text-[#68d284]">
-              {data.total_sell ? "$" + data.total_sell : null}
+              {data.total_sell ? data.total_sell + " sold" : null}
             </span>
           </div>
         </Link>
