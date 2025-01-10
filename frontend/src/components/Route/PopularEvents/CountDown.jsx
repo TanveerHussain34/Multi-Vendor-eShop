@@ -11,7 +11,7 @@ function CountDown() {
   });
 
   function calculateTimeLeft() {
-    const difference = +new Date("2025-01-10") - +new Date();
+    const difference = +new Date("2025-01-31") - +new Date();
     let timeLeft = {};
 
     if (difference > 0) {
