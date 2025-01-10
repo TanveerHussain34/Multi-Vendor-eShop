@@ -13,7 +13,7 @@ app.use(
     credentials: true,
   })
 );
-app.use("/", express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // config
