@@ -425,7 +425,7 @@ export const productData = [
       },
       {
         public_id: "test",
-        url: "https://eratablet.com/wp-content/uploads/2022/08/H51ba6537405f4948972e293927673546u.jpg",
+        url: "https://www.tjmart.pk/image/cachewebp/catalog/products/diza100-g9000-gaming-headset-headphone-3-5mm-stereo-jack-with-mic-led-light-red-and-blue/719egNd9SnL._AC_SL1500_-800x800.webp",
       },
     ],
     shop: {
@@ -493,7 +493,7 @@ export const productData = [
       },
       {
         public_id: "test",
-        url: "https://eratablet.com/wp-content/uploads/2022/08/H51ba6537405f4948972e293927673546u.jpg",
+        url: "https://www.tjmart.pk/image/cachewebp/catalog/products/diza100-g9000-gaming-headset-headphone-3-5mm-stereo-jack-with-mic-led-light-red-and-blue/719egNd9SnL._AC_SL1500_-800x800.webp",
       },
     ],
     shop: {
@@ -561,7 +561,7 @@ export const productData = [
       },
       {
         public_id: "test",
-        url: "https://eratablet.com/wp-content/uploads/2022/08/H51ba6537405f4948972e293927673546u.jpg",
+        url: "https://www.tjmart.pk/image/cachewebp/catalog/products/diza100-g9000-gaming-headset-headphone-3-5mm-stereo-jack-with-mic-led-light-red-and-blue/719egNd9SnL._AC_SL1500_-800x800.webp",
       },
     ],
     shop: {
