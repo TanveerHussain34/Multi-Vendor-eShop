@@ -49,7 +49,7 @@ function ProductDetailsCard({ open, setOpen, data }) {
                   </div>
                 </div>
                 <div
-                  className={`${styles.button} bg-black mt-4 rounded-sm h-11`}
+                  className={`${styles.button} bg-black mt-4 !rounded h-11`}
                   onClick={handleMessageButton}
                 >
                   <span className="text-white flex items-center">
@@ -112,7 +112,7 @@ function ProductDetailsCard({ open, setOpen, data }) {
                   </div>
                 </div>
                 <div
-                  className={`${styles.button} mt-6 rounded-sm h-11 flex items-center`}
+                  className={`${styles.button} mt-6 !rounded h-11 flex items-center`}
                 >
                   <span className="text-white flex items-center">
                     Add to Cart <AiOutlineShoppingCart className="ml-1" />

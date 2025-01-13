@@ -4,6 +4,7 @@ import Header from "../components/Layout/Header";
 import ProductDetails from "../components/Products/ProductDetails";
 import { useEffect, useState } from "react";
 import { productData } from "../static/data";
+import SuggestedProducts from "../components/Products/SuggestedProducts.jsx";
 
 function ProductDetailsPage() {
   const { name } = useParams();
@@ -18,6 +19,7 @@ function ProductDetailsPage() {
     <div>
       <Header />
       <ProductDetails data={data} />
+      {data && <SuggestedProducts data={data} />}
       <Footer />
     </div>
   );

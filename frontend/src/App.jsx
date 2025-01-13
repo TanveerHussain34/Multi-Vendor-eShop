@@ -26,7 +26,7 @@ function App() {
     <>
       {loading ? (
         <div className="font-bold text-[48px] flex items-center justify-center h-screen w-full">
-          Loading
+          Loading...
         </div>
       ) : (
         <BrowserRouter>
