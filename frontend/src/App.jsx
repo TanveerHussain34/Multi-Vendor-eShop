@@ -13,6 +13,7 @@ import {
   EventsPage,
   FAQsPage,
   ProductDetailsPage,
+  ProfilePage,
 } from "./routes/routes.js";
 import { ToastContainer } from "react-toastify";
 
@@ -29,7 +30,9 @@ function App() {
           Loading...
         </div>
       ) : (
-        <BrowserRouter>
+        <BrowserRouter
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -43,6 +46,7 @@ function App() {
             <Route path="/best-selling" element={<BestSellingPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/faqs" element={<FAQsPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
           <ToastContainer
             position="bottom-center"
