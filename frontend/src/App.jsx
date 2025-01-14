@@ -16,9 +16,10 @@ import {
   ProfilePage,
 } from "./routes/routes.js";
 import { ToastContainer } from "react-toastify";
+import ProtectedRoute from "./ProtectedRoute.jsx";
 
 function App() {
-  const { loading } = useSelector((state) => state.user);
+  const { loading, isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadUser());
@@ -46,7 +47,14 @@ function App() {
             <Route path="/best-selling" element={<BestSellingPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/faqs" element={<FAQsPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
           <ToastContainer
             position="bottom-center"

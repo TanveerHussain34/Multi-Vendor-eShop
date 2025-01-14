@@ -1,4 +1,8 @@
-import { AiOutlineArrowRight, AiOutlineCamera } from "react-icons/ai";
+import {
+  AiOutlineArrowRight,
+  AiOutlineCamera,
+  AiOutlineDelete,
+} from "react-icons/ai";
 import { backendUrl } from "../../server";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -6,6 +10,7 @@ import styles from "../../styles/styles";
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import { MdOutlineTrackChanges } from "react-icons/md";
 
 /* eslint-disable react/prop-types */
 function ProfileContent({ active }) {
@@ -23,7 +28,7 @@ function ProfileContent({ active }) {
 
   return (
     <div className="w-full ">
-      {/* Profile Page */}
+      {/* Profile */}
       {active === 1 && (
         <>
           <div className="flex justify-center w-full">
@@ -122,10 +127,38 @@ function ProfileContent({ active }) {
         </>
       )}
 
-      {/* Orders Page */}
+      {/* Orders */}
       {active == 2 && (
         <div>
           <AllOrders />
+        </div>
+      )}
+
+      {/* Refunds */}
+      {active == 3 && (
+        <div>
+          <AllRefunds />
+        </div>
+      )}
+
+      {/* Track Order */}
+      {active == 5 && (
+        <div>
+          <TrackOrders />
+        </div>
+      )}
+
+      {/* Payment Methods */}
+      {active == 6 && (
+        <div>
+          <PaymentMethods />
+        </div>
+      )}
+
+      {/* Address */}
+      {active == 7 && (
+        <div>
+          <Address />
         </div>
       )}
     </div>
@@ -141,7 +174,36 @@ const AllOrders = () => {
           name: "IPhone 14 Pro Max",
         },
       ],
+      totalPrice: 350,
+      orderStatus: "Processing",
+    },
+    {
+      _id: "7463hvbfbhfbrtr28820222",
+      orderItems: [
+        {
+          name: "IPhone 14 Pro Max",
+        },
+        {
+          name: "IPhone 14 Pro Max",
+        },
+        {
+          name: "IPhone 14 Pro Max",
+        },
+      ],
       totalPrice: 200,
+      orderStatus: "Delivered",
+    },
+    {
+      _id: "7463hvbfbhfbrtr28820223",
+      orderItems: [
+        {
+          name: "IPhone 14 Pro Max",
+        },
+        {
+          name: "IPhone 14 Pro Max",
+        },
+      ],
+      totalPrice: 150,
       orderStatus: "Processing",
     },
   ];
@@ -155,7 +217,9 @@ const AllOrders = () => {
       minWidth: 130,
       flex: 0.7,
       cellClassName: (params) => {
-        return params.row.status === "Delivered" ? "greenColor" : "redColor";
+        return params.value === "Delivered"
+          ? "text-green-600"
+          : "text-yellow-600";
       },
     },
     {
@@ -214,6 +278,302 @@ const AllOrders = () => {
         pageSize={10}
         disableSelectionOnClick
       />
+    </div>
+  );
+};
+
+const AllRefunds = () => {
+  const orders = [
+    {
+      _id: "7463hvbfbhfbrtr28820221",
+      orderItems: [
+        {
+          name: "IPhone 14 Pro Max",
+        },
+      ],
+      totalPrice: 350,
+      orderStatus: "Processing",
+    },
+    {
+      _id: "7463hvbfbhfbrtr28820222",
+      orderItems: [
+        {
+          name: "IPhone 14 Pro Max",
+        },
+        {
+          name: "IPhone 14 Pro Max",
+        },
+        {
+          name: "IPhone 14 Pro Max",
+        },
+      ],
+      totalPrice: 200,
+      orderStatus: "Delivered",
+    },
+    {
+      _id: "7463hvbfbhfbrtr28820223",
+      orderItems: [
+        {
+          name: "IPhone 14 Pro Max",
+        },
+        {
+          name: "IPhone 14 Pro Max",
+        },
+      ],
+      totalPrice: 150,
+      orderStatus: "Processing",
+    },
+  ];
+
+  const columns = [
+    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+
+    {
+      field: "status",
+      headerName: "Status",
+      minWidth: 130,
+      flex: 0.7,
+      cellClassName: (params) => {
+        return params.value === "Delivered"
+          ? "text-green-600"
+          : "text-yellow-600";
+      },
+    },
+    {
+      field: "itemsQty",
+      headerName: "Items Qty",
+      type: "number",
+      minWidth: 130,
+      flex: 0.7,
+    },
+
+    {
+      field: "total",
+      headerName: "Total",
+      type: "number",
+      minWidth: 130,
+      flex: 0.8,
+    },
+
+    {
+      field: " ",
+      flex: 1,
+      minWidth: 150,
+      headerName: "",
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Link to={`/order/${params.id}`}>
+              <Button>
+                <AiOutlineArrowRight size={20} />
+              </Button>
+            </Link>
+          </>
+        );
+      },
+    },
+  ];
+
+  const rows = [];
+
+  orders &&
+    orders.forEach((item) => {
+      rows.push({
+        id: item._id,
+        itemsQty: item.orderItems.length,
+        total: "US$ " + item.totalPrice,
+        status: item.orderStatus,
+      });
+    });
+  return (
+    <div className="flex flex-col pl-8 pt-1">
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={10}
+        disableSelectionOnClick
+      />
+    </div>
+  );
+};
+
+const TrackOrders = () => {
+  const orders = [
+    {
+      _id: "7463hvbfbhfbrtr28820221",
+      orderItems: [
+        {
+          name: "IPhone 14 Pro Max",
+        },
+      ],
+      totalPrice: 350,
+      orderStatus: "Processing",
+    },
+    {
+      _id: "7463hvbfbhfbrtr28820222",
+      orderItems: [
+        {
+          name: "IPhone 14 Pro Max",
+        },
+        {
+          name: "IPhone 14 Pro Max",
+        },
+        {
+          name: "IPhone 14 Pro Max",
+        },
+      ],
+      totalPrice: 200,
+      orderStatus: "Delivered",
+    },
+    {
+      _id: "7463hvbfbhfbrtr28820223",
+      orderItems: [
+        {
+          name: "IPhone 14 Pro Max",
+        },
+        {
+          name: "IPhone 14 Pro Max",
+        },
+      ],
+      totalPrice: 150,
+      orderStatus: "Processing",
+    },
+  ];
+
+  const columns = [
+    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+
+    {
+      field: "status",
+      headerName: "Status",
+      minWidth: 130,
+      flex: 0.7,
+      cellClassName: (params) => {
+        return params.value === "Delivered"
+          ? "text-green-600"
+          : "text-yellow-600";
+      },
+    },
+    {
+      field: "itemsQty",
+      headerName: "Items Qty",
+      type: "number",
+      minWidth: 130,
+      flex: 0.7,
+    },
+
+    {
+      field: "total",
+      headerName: "Total",
+      type: "number",
+      minWidth: 130,
+      flex: 0.8,
+    },
+
+    {
+      field: " ",
+      flex: 1,
+      minWidth: 150,
+      headerName: "",
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Link to={`/order/${params.id}`}>
+              <Button>
+                <MdOutlineTrackChanges size={20} />
+              </Button>
+            </Link>
+          </>
+        );
+      },
+    },
+  ];
+
+  const rows = [];
+
+  orders &&
+    orders.forEach((item) => {
+      rows.push({
+        id: item._id,
+        itemsQty: item.orderItems.length,
+        total: "US$ " + item.totalPrice,
+        status: item.orderStatus,
+      });
+    });
+  return (
+    <div className="flex flex-col pl-8 pt-1">
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={10}
+        disableSelectionOnClick
+      />
+    </div>
+  );
+};
+
+const PaymentMethods = () => {
+  return (
+    <div className="w-full px-5">
+      <div className="flex w-full items-center justify-between">
+        <h1 className="text-[25px] font-[600] text-[#000000ba] pb-2">
+          Payment Methods
+        </h1>
+        <div className={`${styles.button} !rounded-md`}>
+          <span className="text-white">Add New</span>
+        </div>
+      </div>
+      <br />
+      <div className="w-full bg-white h-[70px] rounded-[4px] px-5 shadow flex items-center justify-between">
+        <div className="flex items-center">
+          <img
+            src="https:bonik-react.vercel.app/assets/images/payment-methods/Visa.svg"
+            alt=""
+          />
+          <h5 className="font[600]">Tanveer Hussain</h5>
+        </div>
+        <div className="flex items-center">
+          <h6>4563 **** **** ****</h6>
+          <h5 className="pl-6">07/28</h5>
+        </div>
+        <div className="min-h-[10px] flex items-center justify-between">
+          <AiOutlineDelete size={25} className="cursor-pointer" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Address = () => {
+  return (
+    <div className="w-full px-5">
+      <div className="flex w-full items-center justify-between">
+        <h1 className="text-[25px] font-[600] text-[#000000ba] pb-2">
+          Shipping Address
+        </h1>
+        <div className={`${styles.button} !rounded-md`}>
+          <span className="text-white">Add New</span>
+        </div>
+      </div>
+      <br />
+      <div className="w-full bg-white h-[70px] rounded-[4px] px-5 shadow flex items-center justify-between">
+        <div className="flex items-center">
+          <h5 className="font[600]">Default</h5>
+        </div>
+        <div className="flex items-center">
+          <h6>Near Tariq Cash and Carry, Ghousia Chowk, Township, Lahore.</h6>
+        </div>
+        <div className="flex items-center">
+          <h6>+92 309 7053080</h6>
+        </div>
+        <div className="min-h-[10px] flex items-center justify-between">
+          <AiOutlineDelete size={25} className="cursor-pointer" />
+        </div>
+      </div>
     </div>
   );
 };
