@@ -47,81 +47,83 @@ function ProfileContent({ active }) {
           <br />
           <div className="w-full px-5">
             <form onSubmit={handleSubmit} aria-required={true}>
-              <div className="w-full flex pb-3">
-                <div className="w-[50%]">
+              <div className="w-full block 800px:flex justify-between">
+                <div className="w-full 800px:w-[48%] pb-3">
                   <label className="block pb-2">Full Name</label>
                   <input
                     type="text"
-                    className={`${styles.input} !w-[95%]`}
+                    className={`${styles.input}`}
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>
 
-                <div className="w-[50%]">
+                <div className="w-full 800px:w-[48%] pb-3">
                   <label className="block pb-2">Email Address</label>
                   <input
                     type="text"
-                    className={`${styles.input} !w-[95%]`}
+                    className={`${styles.input}`}
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
               </div>
-              <div className="w-full flex pb-3">
-                <div className="w-[50%]">
+              <div className="w-full block 800px:flex justify-between">
+                <div className="w-full 800px:w-[48%] pb-3">
                   <label className="block pb-2">Phone Number</label>
                   <input
                     type="text"
-                    className={`${styles.input} !w-[95%]`}
+                    className={`${styles.input}`}
                     required
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                   />
                 </div>
 
-                <div className="w-[50%]">
+                <div className="w-full 800px:w-[48%] pb-3">
                   <label className="block pb-2">Zip Code</label>
                   <input
                     type="text"
-                    className={`${styles.input} !w-[95%]`}
+                    className={`${styles.input}`}
                     required
                     value={zipCode}
                     onChange={(e) => setZipCode(e.target.value)}
                   />
                 </div>
               </div>
-              <div className="w-full flex pb-3">
-                <div className="w-[50%]">
+              <div className="w-full block 800px:flex justify-between">
+                <div className="w-full 800px:w-[48%] pb-3">
                   <label className="block pb-2">Address 1</label>
                   <input
                     type="text"
-                    className={`${styles.input} !w-[95%]`}
+                    className={`${styles.input}`}
                     required
                     value={address1}
                     onChange={(e) => setAddress1(e.target.value)}
                   />
                 </div>
 
-                <div className="w-[50%]">
+                <div className="w-full 800px:w-[48%] pb-3">
                   <label className="block pb-2">Address 2</label>
                   <input
                     type="text"
-                    className={`${styles.input} !w-[95%]`}
+                    className={`${styles.input}`}
                     required
                     value={address2}
                     onChange={(e) => setAddress2(e.target.value)}
                   />
                 </div>
               </div>
-              <input
-                className="w-[250px] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded mt-8 cursor-pointer"
-                required
-                value="Update"
-                type="submit"
-              />
+              <div className="w-full flex justify-center">
+                <input
+                  className="w-full 800px:w-[48%] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded mt-8 cursor-pointer"
+                  required
+                  value="Update"
+                  type="submit"
+                />
+              </div>
             </form>
           </div>
         </>
@@ -528,19 +530,19 @@ const PaymentMethods = () => {
         </div>
       </div>
       <br />
-      <div className="w-full bg-white h-[70px] rounded-[4px] px-5 shadow flex items-center justify-between">
+      <div className="w-full bg-white h-[70px] rounded-[4px] px-3 shadow flex items-center justify-between">
         <div className="flex items-center">
           <img
             src="https:bonik-react.vercel.app/assets/images/payment-methods/Visa.svg"
             alt=""
           />
-          <h5 className="font[600]">Tanveer Hussain</h5>
+          <h5 className="pl-5 font[600]">Tanveer Hussain</h5>
         </div>
-        <div className="flex items-center">
+        <div className="pl-8 flex items-center">
           <h6>4563 **** **** ****</h6>
           <h5 className="pl-6">07/28</h5>
         </div>
-        <div className="min-h-[10px] flex items-center justify-between">
+        <div className="min-h-[10px] flex items-center justify-between pl-8">
           <AiOutlineDelete size={25} className="cursor-pointer" />
         </div>
       </div>
@@ -560,17 +562,17 @@ const Address = () => {
         </div>
       </div>
       <br />
-      <div className="w-full bg-white h-[70px] rounded-[4px] px-5 shadow flex items-center justify-between">
+      <div className="w-full bg-white h-[70px] rounded-[4px] px-3 shadow flex items-center justify-between">
         <div className="flex items-center">
           <h5 className="font[600]">Default</h5>
         </div>
-        <div className="flex items-center">
-          <h6>Near Tariq Cash and Carry, Ghousia Chowk, Township, Lahore.</h6>
+        <div className="pl-8 flex items-center">
+          <h6>Jamia Masjid, Main Bazar, Raiwind, Lahore.</h6>
         </div>
-        <div className="flex items-center">
+        <div className="pl-8 flex items-center">
           <h6>+92 309 7053080</h6>
         </div>
-        <div className="min-h-[10px] flex items-center justify-between">
+        <div className="min-h-[10px] flex items-center justify-between pl-8">
           <AiOutlineDelete size={25} className="cursor-pointer" />
         </div>
       </div>

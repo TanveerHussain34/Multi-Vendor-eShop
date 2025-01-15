@@ -35,7 +35,11 @@ function ProfileSidebar({ active, setActive }) {
         onClick={() => setActive(1)}
       >
         <RxPerson size={20} color={active === 1 ? "red" : null} />
-        <span className={`pl-3 ${active === 1 ? "text-[red]" : null}`}>
+        <span
+          className={`pl-3 ${
+            active === 1 ? "text-[red]" : null
+          } hidden 800px:block`}
+        >
           Profile
         </span>
       </div>
@@ -45,7 +49,11 @@ function ProfileSidebar({ active, setActive }) {
         onClick={() => setActive(2)}
       >
         <HiOutlineShoppingBag size={20} color={active === 2 ? "red" : null} />
-        <span className={`pl-3 ${active === 2 ? "text-[red]" : null}`}>
+        <span
+          className={`pl-3 ${
+            active === 2 ? "text-[red]" : null
+          } hidden 800px:block`}
+        >
           Orders
         </span>
       </div>
@@ -55,7 +63,11 @@ function ProfileSidebar({ active, setActive }) {
         onClick={() => setActive(3)}
       >
         <HiReceiptRefund size={20} color={active === 3 ? "red" : null} />
-        <span className={`pl-3 ${active === 3 ? "text-[red]" : null}`}>
+        <span
+          className={`pl-3 ${
+            active === 3 ? "text-[red]" : null
+          } hidden 800px:block`}
+        >
           Refunds
         </span>
       </div>
@@ -65,7 +77,11 @@ function ProfileSidebar({ active, setActive }) {
         onClick={() => setActive(4) || navigate("/inbox")}
       >
         <AiOutlineMessage size={20} color={active === 4 ? "red" : null} />
-        <span className={`pl-3 ${active === 4 ? "text-[red]" : null}`}>
+        <span
+          className={`pl-3 ${
+            active === 4 ? "text-[red]" : null
+          } hidden 800px:block`}
+        >
           Inbox
         </span>
       </div>
@@ -75,7 +91,11 @@ function ProfileSidebar({ active, setActive }) {
         onClick={() => setActive(5)}
       >
         <MdOutlineTrackChanges size={20} color={active === 5 ? "red" : null} />
-        <span className={`pl-3 ${active === 5 ? "text-[red]" : null}`}>
+        <span
+          className={`pl-3 ${
+            active === 5 ? "text-[red]" : null
+          } hidden 800px:block`}
+        >
           Track Order
         </span>
       </div>
@@ -85,7 +105,11 @@ function ProfileSidebar({ active, setActive }) {
         onClick={() => setActive(6)}
       >
         <AiOutlineCreditCard size={20} color={active === 6 ? "red" : null} />
-        <span className={`pl-3 ${active === 6 ? "text-[red]" : null}`}>
+        <span
+          className={`pl-3 ${
+            active === 6 ? "text-[red]" : null
+          } hidden 800px:block`}
+        >
           Payment Methods
         </span>
       </div>
@@ -95,7 +119,11 @@ function ProfileSidebar({ active, setActive }) {
         onClick={() => setActive(7)}
       >
         <TbAddressBook size={20} color={active === 7 ? "red" : null} />
-        <span className={`pl-3 ${active === 7 ? "text-[red]" : null}`}>
+        <span
+          className={`pl-3 ${
+            active === 7 ? "text-[red]" : null
+          } hidden 800px:block`}
+        >
           Address
         </span>
       </div>
@@ -105,7 +133,11 @@ function ProfileSidebar({ active, setActive }) {
         onClick={() => setActive(8) || logoutHandler()}
       >
         <AiOutlineLogin size={20} color={active === 8 ? "red" : null} />
-        <span className={`pl-3 ${active === 8 ? "text-[red]" : null}`}>
+        <span
+          className={`pl-3 ${
+            active === 8 ? "text-[red]" : null
+          } hidden 800px:block`}
+        >
           Log out
         </span>
       </div>
