@@ -7,12 +7,15 @@ import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
 
-function Signup() {
+function ShopCreate() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [avatar, setAvatar] = useState(null);
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
-  const [avatar, setAvatar] = useState(null);
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
@@ -50,10 +53,10 @@ function Signup() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 ">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Registration Form
+          Register as a Seller
         </h2>
       </div>
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="mt-8 sm:mx-auto sm:w-full px-3 sm:max-w-[35rem]">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
@@ -61,13 +64,12 @@ function Signup() {
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
-                Full Name:
+                Shop Name:
               </label>
               <div className="mt-1">
                 <input
                   type="text"
                   name="name"
-                  autoComplete="name"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -75,6 +77,26 @@ function Signup() {
                 />
               </div>
             </div>
+
+            <div>
+              <label
+                htmlFor="phoneNumber"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Phone Number:
+              </label>
+              <div className="mt-1">
+                <input
+                  type="number"
+                  name="phoneNumber"
+                  required
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
             <div>
               <label
                 htmlFor="email"
@@ -86,7 +108,6 @@ function Signup() {
                 <input
                   type="email"
                   name="email"
-                  autoComplete="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -94,6 +115,45 @@ function Signup() {
                 />
               </div>
             </div>
+
+            <div>
+              <label
+                htmlFor="shopAddress"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Shop Address:
+              </label>
+              <div className="mt-1">
+                <input
+                  type="text"
+                  name="shopAddress"
+                  required
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="zipCode"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Zip Code:
+              </label>
+              <div className="mt-1">
+                <input
+                  type="number"
+                  name="zipCode"
+                  required
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
             <div>
               <label
                 htmlFor="password"
@@ -126,6 +186,7 @@ function Signup() {
                 )}
               </div>
             </div>
+
             <div>
               <label
                 htmlFor="avatar"
@@ -171,7 +232,7 @@ function Signup() {
               <h4>
                 Already have an account?
                 <Link
-                  to="/login"
+                  to="/shop-login"
                   className="text-blue-600 pl-2 hover:underline"
                 >
                   Login Here
@@ -185,4 +246,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default ShopCreate;

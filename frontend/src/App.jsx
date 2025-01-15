@@ -14,6 +14,9 @@ import {
   FAQsPage,
   ProductDetailsPage,
   ProfilePage,
+  CheckoutPage,
+  ShopCreatePage,
+  PaymentPage,
 } from "./routes/routes.js";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./ProtectedRoute.jsx";
@@ -47,11 +50,22 @@ function App() {
             <Route path="/best-selling" element={<BestSellingPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/faqs" element={<FAQsPage />} />
+            <Route path="/faqs" element={<FAQsPage />} />
+            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/shop-create" element={<ShopCreatePage />} />
             <Route
               path="/profile"
               element={
                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                   <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/checkout"
+              element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <CheckoutPage />
                 </ProtectedRoute>
               }
             />
