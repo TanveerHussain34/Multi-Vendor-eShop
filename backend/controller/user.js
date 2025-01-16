@@ -8,7 +8,6 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const user = require("../model/user");
 const sendToken = require("../utils/jwtToken");
 const { isAuthenticated } = require("../middleware/auth");
 
@@ -41,11 +40,6 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
         url: fileUrl,
       },
     };
-
-    // const newUser = await User.create(user);
-    // res
-    //   .status(201)
-    //   .json({ success: true, message: "User registered successfully" });
 
     const activationToken = createActivationToken(user);
 
@@ -103,16 +97,6 @@ router.post(
         password,
         avatar,
       });
-
-      // await User.create({
-      //   name: name,
-      //   email: email,
-      //   password: password,
-      //   avatar: {
-      //     public_id: filename,
-      //     url: fileUrl,
-      //   },
-      // });
 
       sendToken(user, 201, res);
     } catch (error) {

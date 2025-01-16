@@ -33,15 +33,21 @@ function ShopCreate() {
     newForm.append("email", email);
     newForm.append("password", password);
     newForm.append("file", avatar);
+    newForm.append("phoneNumber", phoneNumber);
+    newForm.append("address", address);
+    newForm.append("zipCode", zipCode);
 
     await axios
-      .post(`${server}/create-user`, newForm, config)
+      .post(`${server}/shop/create-shop`, newForm, config)
       .then((res) => {
         toast.success(res.data.message);
         setName("");
         setEmail("");
         setPassword("");
         setAvatar(null);
+        setPhoneNumber("");
+        setAddress("");
+        setZipCode("");
       })
       .catch((err) => {
         console.log(err);
@@ -222,7 +228,7 @@ function ShopCreate() {
             </div>
             <div>
               <button
-                onSubmit={handleSubmit}
+                type="submit"
                 className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
                 Register

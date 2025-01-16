@@ -17,7 +17,7 @@ function Login() {
 
     axios
       .post(
-        `${server}/login-user`,
+        `${server}/user/login-user`,
         { email, password },
         { withCredentials: true }
       )

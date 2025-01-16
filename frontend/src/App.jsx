@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
-import { loadUser } from "./features/user/userThunks";
+import { loadUser } from "./features/user/userThunks.js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   HomePage,
   SignupPage,
   LoginPage,
   ActivationPage,
+  SellerActivationPage,
   ProductPage,
   BestSellingPage,
   EventsPage,
@@ -16,28 +17,34 @@ import {
   ProfilePage,
   CheckoutPage,
   ShopCreatePage,
+  ShopLoginPage,
   PaymentPage,
 } from "./routes/routes.js";
+import { ShopHomePage } from "./shopRoutes/shopRoutes.js";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import { loadSeller } from "./features/seller/sellerThunks.js";
+import SellerProtectedRoute from "./SellerProtectedRoute.jsx";
 
 function App() {
-  const { loading, isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, loading } = useSelector((state) => state.user);
+  const { isSellerAuthenticated, isLoading } = useSelector(
+    (state) => state.seller
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadUser());
-  }, [dispatch]);
+    dispatch(loadSeller());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <>
-      {loading ? (
-        <div className="font-bold text-[48px] flex items-center justify-center h-screen w-full">
-          Loading...
-        </div>
-      ) : (
+      {loading || isLoading ? null : (
         <BrowserRouter
           future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
         >
           <Routes>
+            {/* user routes */}
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
@@ -45,14 +52,16 @@ function App() {
               path="/activation/:activation_token"
               element={<ActivationPage />}
             />
+            <Route
+              path="/seller/activation/:activation_token"
+              element={<SellerActivationPage />}
+            />
             <Route path="/products" element={<ProductPage />} />
             <Route path="/product/:name" element={<ProductDetailsPage />} />
             <Route path="/best-selling" element={<BestSellingPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/faqs" element={<FAQsPage />} />
-            <Route path="/faqs" element={<FAQsPage />} />
             <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/shop-create" element={<ShopCreatePage />} />
             <Route
               path="/profile"
               element={
@@ -67,6 +76,19 @@ function App() {
                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                   <CheckoutPage />
                 </ProtectedRoute>
+              }
+            />
+            {/* shop routes */}
+            <Route path="/shop-create" element={<ShopCreatePage />} />
+            <Route path="/shop-login" element={<ShopLoginPage />} />
+            <Route
+              path="/shop/:id"
+              element={
+                <SellerProtectedRoute
+                  isSellerAuthenticated={isSellerAuthenticated}
+                >
+                  <ShopHomePage />
+                </SellerProtectedRoute>
               }
             />
           </Routes>
