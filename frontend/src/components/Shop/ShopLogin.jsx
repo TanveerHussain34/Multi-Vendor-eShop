@@ -23,7 +23,8 @@ function ShopLogin() {
       )
       .then(() => {
         toast.success("Login successful!");
-        navigate("/");
+        navigate(`/dashboard`, { replace: true });
+
         window.location.reload();
       })
       .catch((err) => {
@@ -123,7 +124,7 @@ function ShopLogin() {
             </div>
             <div className={`${styles.normalFlex} w-full`}>
               <h4>
-                {`Don't have an account?`}
+                {`Don't have a shop?`}
                 <Link
                   to="/shop-create"
                   className="text-blue-600 pl-2 hover:underline"

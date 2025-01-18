@@ -1,10 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isAuthenticated: false,
-  seller: null,
-  isLoading: false,
-  error: null,
+  isLoading: true,
 };
 
 const sellerSlice = createSlice({
@@ -15,14 +12,14 @@ const sellerSlice = createSlice({
       state.isLoading = true;
     },
     loadSellerSuccess: (state, action) => {
-      state.isAuthenticated = true;
+      state.isSellerAuthenticated = true;
       state.isLoading = false;
       state.seller = action.payload;
     },
     loadSellerFail: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
-      state.isAuthenticated = false;
+      state.isSellerAuthenticated = false;
     },
     clearErrors: (state) => {
       state.error = null;

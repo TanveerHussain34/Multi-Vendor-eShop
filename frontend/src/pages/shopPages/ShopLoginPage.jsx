@@ -1,19 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import ShopLogin from "../components/Shop/ShopLogin.jsx";
+import ShopLogin from "../../components/Shop/ShopLogin.jsx";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
 function ShopLoginPage() {
   const navigate = useNavigate();
-  const { isSellerAuthenticated, seller } = useSelector(
+  const { isSellerAuthenticated, isLoading } = useSelector(
     (state) => state.seller
   );
 
   useEffect(() => {
     if (isSellerAuthenticated === true) {
-      navigate(`/shop/${seller?.id}`, { replace: true });
+      navigate(`/dashboard`, { replace: true });
     }
-  });
+  }, [isLoading, isSellerAuthenticated, navigate]);
   return (
     <div>
       <ShopLogin />

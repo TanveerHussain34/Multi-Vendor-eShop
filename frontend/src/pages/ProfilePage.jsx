@@ -6,6 +6,7 @@ import { useState } from "react";
 
 function ProfilePage() {
   const [active, setActive] = useState(1);
+
   return (
     <div>
       <Header />

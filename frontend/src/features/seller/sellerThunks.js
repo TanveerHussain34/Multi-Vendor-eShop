@@ -12,8 +12,7 @@ export const loadSeller = () => async (dispatch) => {
     dispatch(loadSellerRequest());
     const { data } = await axios.get(`${server}/shop/get-seller`, {
       withCredentials: true,
-    });
-    console.log("Data back to shop/get-seller axios request", data);
+    }); // data coming back from the backend
     dispatch(loadSellerSuccess(data?.seller));
   } catch (error) {
     dispatch(loadSellerFail(error?.response?.data?.message));

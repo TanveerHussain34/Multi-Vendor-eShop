@@ -11,6 +11,8 @@ export const loadUser = () => async (dispatch) => {
     });
     dispatch(loadUserSuccess(data?.user));
   } catch (error) {
-    dispatch(loadUserFail(error?.response?.data?.message));
+    dispatch(
+      loadUserFail(error?.response?.data?.message || "Something went wrong!")
+    );
   }
 };

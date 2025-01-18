@@ -4,12 +4,12 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 function LoginPage() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, loading } = useSelector((state) => state.user);
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
     }
-  }, [isAuthenticated, navigate]);
+  }, [loading, isAuthenticated, navigate]);
   return (
     <div>
       <Login />
