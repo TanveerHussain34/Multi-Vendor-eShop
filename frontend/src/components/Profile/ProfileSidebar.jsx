@@ -16,17 +16,17 @@ import { server } from "../../server";
 function ProfileSidebar({ active, setActive }) {
   const navigate = useNavigate();
 
-  const logoutHandler = () => {
-    axios
-      .get(`${server}/user/logout`, { withCredentials: true })
-      .then((res) => {
-        toast.success(res.data.message);
-        window.location.reload();
-        navigate("/login");
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
+  const logoutHandler = async () => {
+    try {
+      const res = await axios.get(`${server}/user/logout`, {
+        withCredentials: true,
       });
+      toast.success(res?.data?.message);
+      window.location.reload();
+      navigate("/login");
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
   };
   return (
     <div className="w-full bg-white shadow-sm rounded-[10px] p-4 pt-8">
