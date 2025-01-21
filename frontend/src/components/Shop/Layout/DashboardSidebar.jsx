@@ -43,7 +43,7 @@ function DashboardSidebar({ active }) {
 
       <div className="w-full flex items-center p-4">
         <Link
-          to="/dashboard/products"
+          to="/dashboard/all-products"
           className={`w-full flex items-center ${
             active === 3 ? "text-[crimson]" : "text-[#555]"
           }`}
@@ -74,7 +74,7 @@ function DashboardSidebar({ active }) {
 
       <div className="w-full flex items-center p-4">
         <Link
-          to="/dashboard/events"
+          to="/dashboard/all-events"
           className={`w-full flex items-center ${
             active === 5 ? "text-[crimson]" : "text-[#555]"
           }`}
