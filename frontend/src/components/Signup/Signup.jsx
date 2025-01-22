@@ -153,6 +153,7 @@ function Signup() {
                     name="avatar"
                     id="file-input"
                     accept=".jpg,.png,.jpeg"
+                    required
                     onChange={handleFileInputChange}
                     className="sr-only"
                   />

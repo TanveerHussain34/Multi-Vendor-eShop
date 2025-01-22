@@ -67,6 +67,7 @@ function CreateProduct() {
             type="text"
             id="name"
             autoComplete="true"
+            required
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter product name"
@@ -83,6 +84,7 @@ function CreateProduct() {
             rows="8"
             type="text"
             id="description"
+            required
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter product description"
@@ -97,6 +99,7 @@ function CreateProduct() {
           <select
             id="category"
             className="w-full mt-2 border h-[35px] rounded-[5px]"
+            required
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
@@ -145,6 +148,7 @@ function CreateProduct() {
           <input
             type="text"
             id="discountPrice"
+            required
             value={discountPrice}
             onChange={(e) => setDiscountPrice(e.target.value)}
             placeholder="Enter product discount price"
@@ -159,6 +163,7 @@ function CreateProduct() {
           <input
             type="text"
             id="stock"
+            required
             value={stock}
             onChange={(e) => setStock(e.target.value)}
             placeholder="Enter product stock"
@@ -173,6 +178,7 @@ function CreateProduct() {
           <input
             type="file"
             id="images"
+            required
             hidden
             multiple
             onChange={handleImageChange}
@@ -209,7 +215,7 @@ function CreateProduct() {
           <input
             type="submit"
             value="Create"
-            className="mt-2 block w-full px-3 h-[35px] border border-gray-300 rounded-[3px]  hover:bg-blue-500 hover:text-white sm:text-sm transition duration-200"
+            className="mt-2 block w-full px-3 h-[35px] border border-gray-300 rounded-[3px]  hover:bg-blue-500 hover:text-white sm:text-sm transition duration-200 cursor-pointer"
           />
         </div>
       </form>
