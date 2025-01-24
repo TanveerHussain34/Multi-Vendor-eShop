@@ -9,6 +9,9 @@ import {
   deleteEventRequest,
   deleteEventSuccess,
   deleteEventFail,
+  getAllEventsRequest,
+  getAllEventsSuccess,
+  getAllEventsFail,
 } from "./eventSlice";
 import { server } from "../../server";
 
@@ -52,5 +55,16 @@ export const deleteEvent = (id) => async (dispatch) => {
     dispatch(deleteEventSuccess(data?.message));
   } catch (error) {
     dispatch(deleteEventFail(error?.response?.data?.message));
+  }
+};
+
+// get all events
+export const getAllEvents = () => async (dispatch) => {
+  try {
+    dispatch(getAllEventsRequest());
+    const { data } = await axios.get(`${server}/event/get-all-events`);
+    dispatch(getAllEventsSuccess(data?.events));
+  } catch (error) {
+    dispatch(getAllEventsFail(error?.response?.data?.message));
   }
 };

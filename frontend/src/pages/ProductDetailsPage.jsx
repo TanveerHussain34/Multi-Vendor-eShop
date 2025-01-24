@@ -3,23 +3,31 @@ import Footer from "../components/Layout/Footer";
 import Header from "../components/Layout/Header";
 import ProductDetails from "../components/Products/ProductDetails";
 import { useEffect, useState } from "react";
-import { productData } from "../static/data";
 import SuggestedProducts from "../components/Products/SuggestedProducts.jsx";
+import { useSelector } from "react-redux";
 
 function ProductDetailsPage() {
-  const { name } = useParams();
+  const { allProducts } = useSelector((state) => state.product);
+  const { allEvents } = useSelector((state) => state.event);
+  const { id } = useParams();
   const [data, setData] = useState(null);
-  const productName = name.replace(/-/g, " ");
+  const [searchParams] = useParams();
+  const eventData = searchParams.get("isEvent");
 
   useEffect(() => {
-    const data = productData.find((i) => i.name === productName);
-    setData(data);
-  }, [productName]);
+    if (eventData !== null) {
+      const data = allEvents && allEvents.find((i) => i._id === id);
+      setData(data);
+    } else {
+      const data = allProducts && allProducts.find((i) => i._id === id);
+      setData(data);
+    }
+  }, [allEvents, id, eventData, allProducts]);
   return (
     <div>
       <Header />
       <ProductDetails data={data} />
-      {data && <SuggestedProducts data={data} />}
+      {!eventData && <>{data && <SuggestedProducts data={data} />}</>}
       <Footer />
     </div>
   );

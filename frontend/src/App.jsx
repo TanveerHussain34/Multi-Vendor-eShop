@@ -28,11 +28,14 @@ import {
   ShopCreateEvent,
   ShopAllEvents,
   ShopAllCoupons,
+  ShopPreviewPage,
 } from "./routes/shopRoutes/shopRoutes.js";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./routes/protectedRoutes/ProtectedRoute.jsx";
 import { loadSeller } from "./features/seller/sellerThunks.js";
 import SellerProtectedRoute from "./routes/protectedRoutes/SellerProtectedRoute.jsx";
+import { getAllProducts } from "./features/product/productThunks.js";
+import { getAllEvents } from "./features/event/eventThunks.js";
 // import AdminProtectedRoute from "./routes/protectedRoutes/AdminProtectedRoute.jsx";
 
 function App() {
@@ -41,6 +44,8 @@ function App() {
   useEffect(() => {
     dispatch(loadUser());
     dispatch(loadSeller());
+    dispatch(getAllProducts());
+    dispatch(getAllEvents());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -83,6 +88,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
           {/* shop routes */}
           <Route path="/shop-create" element={<ShopCreatePage />} />
           <Route path="/shop-login" element={<ShopLoginPage />} />

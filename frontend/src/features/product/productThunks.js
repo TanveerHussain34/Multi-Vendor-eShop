@@ -9,6 +9,9 @@ import {
   deleteProductRequest,
   deleteProductSuccess,
   deleteProductFail,
+  getAllProductsRequest,
+  getAllProductsSuccess,
+  getAllProductsFail,
 } from "./productSlice";
 import { server } from "../../server";
 
@@ -52,5 +55,16 @@ export const deleteProduct = (id) => async (dispatch) => {
     dispatch(deleteProductSuccess(data?.message));
   } catch (error) {
     dispatch(deleteProductFail(error?.response?.data?.message));
+  }
+};
+
+// get all products
+export const getAllProducts = () => async (dispatch) => {
+  try {
+    dispatch(getAllProductsRequest());
+    const { data } = await axios.get(`${server}/product/get-all-products`);
+    dispatch(getAllProductsSuccess(data?.products));
+  } catch (error) {
+    dispatch(getAllProductsFail(error?.response?.data?.message));
   }
 };

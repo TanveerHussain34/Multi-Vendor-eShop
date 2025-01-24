@@ -132,7 +132,7 @@ function CreateProduct() {
             Original Price
           </label>
           <input
-            type="text"
+            type="number"
             id="originalPrice"
             value={originalPrice}
             onChange={(e) => setOriginalPrice(e.target.value)}
@@ -146,7 +146,7 @@ function CreateProduct() {
             Discount Price <span className="text-red-500">*</span>
           </label>
           <input
-            type="text"
+            type="number"
             id="discountPrice"
             required
             value={discountPrice}

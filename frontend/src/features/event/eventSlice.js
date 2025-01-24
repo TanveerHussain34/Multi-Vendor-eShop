@@ -48,6 +48,19 @@ const eventSlice = createSlice({
       state.error = action.payload;
     },
 
+    // get all evens
+    getAllEventsRequest: (state) => {
+      state.isLoading = true;
+    },
+    getAllEventsSuccess: (state, action) => {
+      state.isLoading = false;
+      state.allEvents = action.payload;
+    },
+    getAllEventsFail: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+
     clearErrors: (state) => {
       state.error = null;
     },
@@ -65,6 +78,9 @@ export const {
   deleteEventRequest,
   deleteEventSuccess,
   deleteEventFail,
+  getAllEventsRequest,
+  getAllEventsSuccess,
+  getAllEventsFail,
   clearErrors,
 } = eventSlice.actions;
 

@@ -40,9 +40,7 @@ router.get(
       const coupons = await CouponCode.find({
         shopId: req.seller.id,
       });
-      if (coupons.length < 1) {
-        return next(new ErrorHandler("No coupon found!", 404));
-      }
+
       res.status(201).json({ success: true, coupons });
     } catch (error) {
       return next(new ErrorHandler(error, 400));

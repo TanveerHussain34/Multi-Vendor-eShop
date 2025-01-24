@@ -2,8 +2,6 @@
 import { useState } from "react";
 import {
   AiFillHeart,
-  AiFillStar,
-  AiOutlineStar,
   AiOutlineHeart,
   AiOutlineEye,
   AiOutlineShoppingCart,
@@ -11,8 +9,10 @@ import {
 import { Link } from "react-router-dom";
 import styles from "../../../styles/styles";
 import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard.jsx";
+import { backendUrl } from "../../../server.js";
+import Ratings from "../../Products/Ratings.jsx";
 
-function ProductCard({ data }) {
+function ProductCard({ data, isEvent }) {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -24,58 +24,40 @@ function ProductCard({ data }) {
         <div className="flex justify-end"></div>
         <Link to={`/product/${productName}`}>
           <img
-            src={data.image_Url[0].url}
+            src={`${backendUrl}uploads/${data.images[0]}`} // will change while using cloudinary
             alt=""
             className="w-full h-[170px] object-contain"
           />
         </Link>
-        <Link to={`/`}>
+        <Link to={`/shop/preview/${data.shop._id}`}>
           <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
         </Link>
-        <Link to={`/product/${productName}`}>
+        <Link
+          to={
+            isEvent
+              ? `/product/${data._id}?isEvent=true`
+              : `/product/${data._id}`
+          }
+        >
           <h4 className="pb-3 font-[500]">
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
           <div className="flex">
-            <AiFillStar
-              className="mr-2 cursor-pointer"
-              size={20}
-              color="#F6BA00"
-            />
-            <AiFillStar
-              className="mr-2 cursor-pointer"
-              size={20}
-              color="#F6BA00"
-            />
-            <AiFillStar
-              className="mr-2 cursor-pointer"
-              size={20}
-              color="#F6BA00"
-            />
-            <AiFillStar
-              className="mr-2 cursor-pointer"
-              size={20}
-              color="#F6BA00"
-            />
-            <AiOutlineStar
-              className="mr-2 cursor-pointer"
-              size={20}
-              color="#F6BA00"
-            />
+            <Ratings ratings={data.ratings} />
           </div>
           <div className="py-2 flex items-center justify-between">
             <div className="flex">
               <h5 className={`${styles.productDiscountPrice}`}>
-                {data.price === 0
-                  ? "$" + data.price
-                  : "$" + data.discount_price}
+                {data.originalPrice === 0
+                  ? "$" + data.originalPrice
+                  : "$" + data.discountPrice}
               </h5>
               <h4 className={`${styles.price}`}>
-                {data.price ? "$" + data.price : null}
+                {data.originalPrice ? "$" + data.originalPrice : null}
               </h4>
             </div>
             <span className="font-[400] text-[17px] text-[#68d284]">
-              {data.total_sell ? data.total_sell + " sold" : null}
+              {data.soldOut ? data.soldOut + " sold" : null}
             </span>
           </div>
         </Link>
