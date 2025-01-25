@@ -1,19 +1,28 @@
 /* eslint-disable react/prop-types */
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AiFillHeart,
   AiOutlineHeart,
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import { backendUrl } from "../../server";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProductsShop } from "../../features/product/productThunks";
 
 function ProductDetails({ data }) {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.product);
+
+  useEffect(() => {
+    dispatch(getAllProductsShop(data && data.shop._id));
+  }, [data, dispatch]);
 
   const decrementCount = () => {
     if (count > 1) setCount(count - 1);
@@ -29,40 +38,32 @@ function ProductDetails({ data }) {
   return (
     <div className="bg-white">
       {data ? (
-        <div className={`${styles.section} w-[90%] 800px:w-[80%] min-h-screen`}>
+        <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
           <div className="w-full py-5">
-            <div className="block w-full 800px:flex">
+            <div className="block w-full 800px:flex gap-5">
               <div className="w-full 800px:w-[50%]">
                 <img
-                  src={data?.image_Url[select].url}
+                  src={`${backendUrl}uploads/${data?.images[select]}`}
                   alt=""
                   className="w-[80%]"
                 />
                 <div className="w-full flex">
-                  <div
-                    className={`${
-                      select === 0 ? "border" : null
-                    } cursor-pointer`}
-                  >
-                    <img
-                      src={data?.image_Url[0].url}
-                      alt=""
-                      className="h-[200px]"
-                      onClick={() => setSelect(0)}
-                    />
-                  </div>
-                  <div
-                    className={`${
-                      select === 1 ? "border" : null
-                    } cursor-pointer`}
-                  >
-                    <img
-                      src={data?.image_Url[1].url}
-                      alt=""
-                      className="h-[200px]"
-                      onClick={() => setSelect(1)}
-                    />
-                  </div>
+                  {data &&
+                    data.images.map((i, index) => (
+                      <div
+                        className={`${
+                          select === index ? "border" : "null"
+                        } cursor-pointer`}
+                        key={index}
+                      >
+                        <img
+                          src={`${backendUrl}uploads/${i}`}
+                          alt=""
+                          className="h-[200px] overflow-hidden mr-3 mt-3"
+                          onClick={() => setSelect(index)}
+                        />
+                      </div>
+                    ))}
                 </div>
               </div>
               <div className="w-full 800px:w-[50%] pt-5">
@@ -70,10 +71,10 @@ function ProductDetails({ data }) {
                 <p className="">{data.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    ${data.discount_price}
+                    ${data.discountPrice}
                   </h4>
                   <h3 className={`${styles.price}`}>
-                    {data.price ? "$" + data.price : null}
+                    {data.originalPrice ? "$" + data.originalPrice : null}
                   </h3>
                 </div>
                 <div className="flex items-center mt-12 justify-between pr-3">
@@ -122,17 +123,22 @@ function ProductDetails({ data }) {
                   </span>
                 </div>
                 <div className={`flex items-center pt-8`}>
-                  <img
-                    src={data.shop.shop_avatar.url}
-                    alt=""
-                    className="w-[50px] h-[50px] rounded-full mr-2"
-                  />
+                  <Link to={`/shop/preview/${data?.shop._id}`}>
+                    <img
+                      src={`${backendUrl}${data?.shop?.avatar?.url}`}
+                      alt=""
+                      className="w-[50px] h-[50px] rounded-full mr-2"
+                    />
+                  </Link>
                   <div className="pr-8">
-                    <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                      {data.shop.name}
-                    </h3>
+                    <Link to={`/shop/preview/${data?.shop._id}`}>
+                      <h3 className={`${styles.shop_name} !pb-0`}>
+                        {data.shop.name}
+                      </h3>
+                    </Link>
                     <h5 className={`pb-3 text-[15px]`}>
-                      ({data.shop.ratings}) Ratings
+                      {/* ({data.shop.ratings}) Ratings */}
+                      (4/5) Ratings
                     </h5>
                   </div>
                   <div
@@ -148,7 +154,7 @@ function ProductDetails({ data }) {
             </div>
           </div>
           <div>
-            <ProductDetailsInfo data={data} />
+            <ProductDetailsInfo data={data} products={products} />
             <br />
             <br />
           </div>
@@ -158,8 +164,9 @@ function ProductDetails({ data }) {
   );
 }
 
-const ProductDetailsInfo = ({ data }) => {
+const ProductDetailsInfo = ({ data, products }) => {
   const [active, setActive] = useState(1);
+
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 rounded">
       <div className="w-full flex justify-between border-b pt-10 pb-2">
@@ -253,48 +260,62 @@ const ProductDetailsInfo = ({ data }) => {
       {active === 3 ? (
         <div className="w-full block 800px:flex p-5">
           <div className="w-full 800px:w-[50%]">
-            <div className={`flex items-center`}>
-              <img
-                src={data.shop.shop_avatar.url}
-                alt=""
-                className="w-[50px] h-[50px] rounded-full mr-2"
-              />
-              <div className="pr-8">
-                <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                  {data.shop.name}
-                </h3>
-                <h5 className={`pb-3 text-[15px]`}>
-                  ({data.shop.ratings}) Ratings
-                </h5>
+            <div className="flex">
+              <div className={`flex items-center`}>
+                <Link to={`/shop/preview/${data?.shop._id}`}>
+                  <img
+                    src={`${backendUrl}${data?.shop?.avatar?.url}`}
+                    alt=""
+                    className="w-[50px] h-[50px] rounded-full mr-2"
+                  />
+                </Link>
+                <div className="pr-8">
+                  <Link to={`/shop/preview/${data?.shop._id}`}>
+                    <h3 className={`${styles.shop_name} !pb-0`}>
+                      {data.shop.name}
+                    </h3>
+                  </Link>
+                  <h5 className={`pb-3 text-[15px]`}>
+                    {/* ({data.shop.ratings}) Ratings */}
+                    (4/5) Ratings
+                  </h5>
+                </div>
               </div>
-              {/* <div
-                    className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`}
-                    onClick={handleMessageSubmit}
-                  >
-                    <span className="text-white flex items-center">
-                      Send Message <AiOutlineMessage className="ml-1" />
-                    </span>
-                  </div> */}
+              <div
+                className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`}
+                // onClick={handleMessageSubmit}
+              >
+                <span className="text-white flex items-center">
+                  Send Message <AiOutlineMessage className="ml-1" />
+                </span>
+              </div>
             </div>
+            {/* <p className="pt-2">{data.shop.description}</p> */}
             <p className="pt-2">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-              Veritatis doloremque quos fugit cum reprehenderit eligendi
-              doloribus eveniet aliquam iste saepe quod earum, velit hic
-              pariatur non, natus nobis minima iusto!
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+              Repellendus minus reprehenderit expedita adipisci praesentium aut,
+              blanditiis eaque illo ipsum exercitationem.
             </p>
           </div>
           <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
               <h5 className="font-[600]">
-                Joined On: <span className="font-[500]">Jan 13, 2025</span>
+                Joined On:{" "}
+                <span className="font-[500]">
+                  {data.shop.createdAt.slice(0, 10)}
+                </span>
               </h5>
               <h5 className="font-[600] pt-3">
-                Total Products: <span className="font-[500]">1223</span>
+                Total Products:{" "}
+                <span className="font-[500]">
+                  {products && products.length}
+                </span>
               </h5>
               <h5 className="font-[600] pt-3">
-                Total Reviews: <span className="font-[500]">325</span>
+                {/* Total Reviews: <span className="font-[500]">{totalReviewsLength}</span> */}
+                Total Reviews: <span className="font-[500]">5</span>
               </h5>
-              <Link to="/">
+              <Link to={`/shop/preview/${data.shop._id}`}>
                 <div
                   className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}
                 >

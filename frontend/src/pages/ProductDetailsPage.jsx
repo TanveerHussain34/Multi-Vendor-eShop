@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import Footer from "../components/Layout/Footer";
 import Header from "../components/Layout/Header";
 import ProductDetails from "../components/Products/ProductDetails";
@@ -11,7 +11,7 @@ function ProductDetailsPage() {
   const { allEvents } = useSelector((state) => state.event);
   const { id } = useParams();
   const [data, setData] = useState(null);
-  const [searchParams] = useParams();
+  const [searchParams] = useSearchParams();
   const eventData = searchParams.get("isEvent");
 
   useEffect(() => {

@@ -15,14 +15,17 @@ import Ratings from "../../Products/Ratings.jsx";
 function ProductCard({ data, isEvent }) {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
-
-  const d = data.name;
-  const productName = d.replace(/\s+/g, "-");
   return (
     <>
       <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
         <div className="flex justify-end"></div>
-        <Link to={`/product/${productName}`}>
+        <Link
+          to={
+            isEvent
+              ? `/product/${data._id}?isEvent=true`
+              : `/product/${data._id}`
+          }
+        >
           <img
             src={`${backendUrl}uploads/${data.images[0]}`} // will change while using cloudinary
             alt=""
