@@ -4,13 +4,15 @@ import styles from "../styles/styles";
 import ProductCard from "../components/Route/ProductCard/ProductCard";
 import { useSelector } from "react-redux";
 import Loader from "../components/Layout/Loader";
+import Footer from "../components/Layout/Footer";
 
 function BestSellingPage() {
   const [data, setData] = useState([]);
   const { allProducts, isLoading } = useSelector((state) => state.product);
 
   useEffect(() => {
-    const d = allProducts && allProducts.sort((a, b) => b.soldOut - a.soldOut);
+    const d =
+      allProducts && [...allProducts].sort((a, b) => a.soldOut - b.soldOut);
     setData(d);
   }, [allProducts]);
   return (
@@ -28,6 +30,7 @@ function BestSellingPage() {
                 data.map((i, index) => <ProductCard data={i} key={index} />)}
             </div>
           </div>
+          <Footer />
         </div>
       )}
     </>

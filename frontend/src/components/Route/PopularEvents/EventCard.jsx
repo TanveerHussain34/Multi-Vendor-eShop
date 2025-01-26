@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import styles from "../../../styles/styles";
 import CountDown from "./CountDown.jsx";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import { backendUrl } from "../../../server.js";
 
-function EventCard({ active }) {
+function EventCard({ active, data }) {
   return (
     <div
       className={`w-full block bg-white rounded-lg ${
@@ -12,36 +13,25 @@ function EventCard({ active }) {
       } lg:flex p-2`}
     >
       <div className="w-full lg:w-[50%] m-auto">
-        <img src="https://m.media-amazon.com/images/I/31Vle5fVdaL.jpg" alt="" />
+        <img src={`${backendUrl}uploads/${data.images[0]}`} alt="" />
       </div>
       <div className="w-full lg:w-[50%] flex flex-col justify-center">
-        <h2 className={`${styles.productTitle}`}>
-          Iphone 14 pro max 256 gb ssd and 8 gb ram silver colour
-        </h2>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque
-          cum quo debitis eligendi quas facere sapiente, mollitia nesciunt est,
-          nobis non accusantium numquam repudiandae voluptate accusamus
-          molestias, atque a perferendis? Lorem ipsum, dolor sit amet
-          consectetur adipisicing elit. Ex eius, necessitatibus temporibus magni
-          officiis doloremque inventore provident sed similique vitae reiciendis
-          suscipit dolorum aut consectetur, repudiandae assumenda tempora, quis
-          tempore.
-        </p>
+        <h2 className={`${styles.productTitle}`}>{data.name}</h2>
+        <p>{data.description}</p>
         <div className="flex py-2 justify-between">
           <div className="flex">
             <h5 className="font-[500] text-[18px] text-[#d55b45] pr-3 line-through">
-              $1099
+              ${data.originalPrice}
             </h5>
             <h5 className="font-[500] text-[20px] text-[#333] font-Roboto">
-              $999
+              ${data.discountPrice}
             </h5>
           </div>
           <span className="pr-3 font-[400] text-[17px] text-[#44a55e]">
-            120 sold
+            {data.soldOut ? data.soldOut + " sold" : null}
           </span>
         </div>
-        <CountDown />
+        <CountDown data={data} />
         <div className="w-full flex justify-start space-x-10">
           <button
             className={`${styles.button} text-white mt-6 rounded-sm h-11 flex items-center`}

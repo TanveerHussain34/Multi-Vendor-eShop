@@ -40,14 +40,14 @@ function ProductDetails({ data }) {
       {data ? (
         <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
           <div className="w-full py-5">
-            <div className="block w-full 800px:flex gap-5">
+            <div className="block w-full 800px:flex gap-3">
               <div className="w-full 800px:w-[50%]">
                 <img
                   src={`${backendUrl}uploads/${data?.images[select]}`}
                   alt=""
                   className="w-[80%]"
                 />
-                <div className="w-full flex">
+                <div className="w-full grid grid-cols-3 gap-3">
                   {data &&
                     data.images.map((i, index) => (
                       <div
@@ -206,47 +206,8 @@ const ProductDetailsInfo = ({ data, products }) => {
       </div>
       {active === 1 ? (
         <>
-          <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos
-            cumque, asperiores libero ut culpa delectus. Nobis deserunt quod ex
-            expedita cumque libero quam at temporibus repellendus repudiandae,
-            architecto placeat velit earum accusantium, neque labore explicabo
-            ipsa nesciunt. Maxime inventore ipsum necessitatibus et veniam eius
-            optio error commodi? Quos laborum veritatis libero, pariatur
-            voluptates nihil rem, sapiente, dicta incidunt laboriosam at quasi!
-            Laboriosam voluptate inventore id quasi sequi fugit deserunt
-            doloribus voluptatum? Quis error labore asperiores, provident fuga
-            cupiditate ea nemo dolor recusandae ratione consequuntur! Deleniti
-            minima, dolores voluptate aut repellendus ut nesciunt beatae
-            possimus voluptatum fugit asperiores, quos est repudiandae.
-          </p>
-          <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos
-            cumque, asperiores libero ut culpa delectus. Nobis deserunt quod ex
-            expedita cumque libero quam at temporibus repellendus repudiandae,
-            architecto placeat velit earum accusantium, neque labore explicabo
-            ipsa nesciunt. Maxime inventore ipsum necessitatibus et veniam eius
-            optio error commodi? Quos laborum veritatis libero, pariatur
-            voluptates nihil rem, sapiente, dicta incidunt laboriosam at quasi!
-            Laboriosam voluptate inventore id quasi sequi fugit deserunt
-            doloribus voluptatum? Quis error labore asperiores, provident fuga
-            cupiditate ea nemo dolor recusandae ratione consequuntur! Deleniti
-            minima, dolores voluptate aut repellendus ut nesciunt beatae
-            possimus voluptatum fugit asperiores, quos est repudiandae.
-          </p>
-          <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos
-            cumque, asperiores libero ut culpa delectus. Nobis deserunt quod ex
-            expedita cumque libero quam at temporibus repellendus repudiandae,
-            architecto placeat velit earum accusantium, neque labore explicabo
-            ipsa nesciunt. Maxime inventore ipsum necessitatibus et veniam eius
-            optio error commodi? Quos laborum veritatis libero, pariatur
-            voluptates nihil rem, sapiente, dicta incidunt laboriosam at quasi!
-            Laboriosam voluptate inventore id quasi sequi fugit deserunt
-            doloribus voluptatum? Quis error labore asperiores, provident fuga
-            cupiditate ea nemo dolor recusandae ratione consequuntur! Deleniti
-            minima, dolores voluptate aut repellendus ut nesciunt beatae
-            possimus voluptatum fugit asperiores, quos est repudiandae.
+          <p className="py-2 text-[18px] min-h-[40vh] leading-8 pb-10 whitespace-pre-line">
+            {data.description}
           </p>
         </>
       ) : null}
@@ -258,7 +219,7 @@ const ProductDetailsInfo = ({ data, products }) => {
       ) : null}
 
       {active === 3 ? (
-        <div className="w-full block 800px:flex p-5">
+        <div className="w-full min-h-[40vh] block 800px:flex p-5">
           <div className="w-full 800px:w-[50%]">
             <div className="flex">
               <div className={`flex items-center`}>
@@ -290,19 +251,14 @@ const ProductDetailsInfo = ({ data, products }) => {
                 </span>
               </div>
             </div>
-            {/* <p className="pt-2">{data.shop.description}</p> */}
-            <p className="pt-2">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Repellendus minus reprehenderit expedita adipisci praesentium aut,
-              blanditiis eaque illo ipsum exercitationem.
-            </p>
+            <p className="pt-2">{data.shop.description}</p>
           </div>
           <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
               <h5 className="font-[600]">
                 Joined On:{" "}
                 <span className="font-[500]">
-                  {data.shop.createdAt.slice(0, 10)}
+                  {data.shop?.createdAt?.slice(0, 10)}
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">

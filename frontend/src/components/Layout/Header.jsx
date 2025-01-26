@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import styles from "../../styles/styles";
-import { Link } from "react-router-dom";
-import { productData } from "../../static/data";
+import { Link, useParams } from "react-router-dom";
 import {
   AiOutlineHeart,
   AiOutlineSearch,
@@ -30,6 +29,7 @@ function Header({ activeHeading }) {
   const [openWishlist, setOpenWishlist] = useState(false);
   // const [openProfile, setOpenProfile] = useState(false);
   const [open, setOpen] = useState(false);
+  const { allProducts } = useSelector((state) => state.product);
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -39,8 +39,8 @@ function Header({ activeHeading }) {
       setSearchData(null);
     } else {
       const filteredProducts =
-        productData &&
-        productData.filter((product) =>
+        allProducts &&
+        allProducts.filter((product) =>
           product.name.toLowerCase().includes(term.toLowerCase())
         );
       setSearchData(filteredProducts);
@@ -81,17 +81,14 @@ function Header({ activeHeading }) {
               className="absolute right-2 top-1.5 cursor-pointer"
             />
             {searchData && searchData.length !== 0 ? (
-              <div className="absolute min-h-[30vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
+              <div className="absolute h-auto w-full bg-slate-50 shadow-sm-2 z-[9] p-4">
                 {searchData &&
                   searchData.map((i, index) => {
-                    const d = i.name;
-
-                    const productName = d.replace(/\s+/g, "-");
                     return (
-                      <Link to={`/product/${productName}`} key={index}>
+                      <Link to={`/product/${i._id}`} key={index}>
                         <div className="w-full flex items-start py-3">
                           <img
-                            src={i.image_Url[0].url}
+                            src={`${backendUrl}uploads/${i.images[0]}`}
                             alt=""
                             className="w-[40px] h-[40px] mr-[10px]"
                           />

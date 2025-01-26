@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 
-function CountDown() {
+function CountDown({ data }) {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
@@ -11,7 +12,7 @@ function CountDown() {
   });
 
   function calculateTimeLeft() {
-    const difference = +new Date("2025-01-31") - +new Date();
+    const difference = +new Date(data.finishDate) - +new Date();
     let timeLeft = {};
 
     if (difference > 0) {
@@ -27,7 +28,7 @@ function CountDown() {
 
   const timerComponents = Object.keys(timeLeft).map((interval) => {
     if (!timeLeft[interval]) {
-      return;
+      return null;
     }
     return (
       <span className="text-[25px] text-[#475ad2]" key={interval}>
@@ -35,6 +36,7 @@ function CountDown() {
       </span>
     );
   });
+
   return (
     <div>
       {timerComponents.length ? (

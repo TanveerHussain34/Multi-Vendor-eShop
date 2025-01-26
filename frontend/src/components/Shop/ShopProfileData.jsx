@@ -86,8 +86,8 @@ function ShopProfileData({ isOwner }) {
       </div>
 
       <div>
-        {active === 2 && (
-          <div className="w-full">
+        {active === 2 && events && events.length !== 0 ? (
+          <div className={`w-full ${active === 2 ? "block" : "hidden"}`}>
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
               {events &&
                 events.map((i, index) => (
@@ -99,11 +99,12 @@ function ShopProfileData({ isOwner }) {
                   />
                 ))}
             </div>
-            {events && events.length === 0 && (
-              <h5 className="w-full text-center py-5 text-[18px]">
-                No active events for this shop!
-              </h5>
-            )}
+          </div>
+        ) : (
+          <div className={`w-full ${active === 2 ? "block" : "hidden"}`}>
+            <h5 className="w-full flex items-center justify-center h-[50vh]">
+              No active events for this shop!
+            </h5>
           </div>
         )}
       </div>
@@ -139,6 +140,7 @@ function ShopProfileData({ isOwner }) {
           //     </h5>
           //   )}
           // </div>
+          // REMOVE THE FOLLOWING DIV AFTER IMPLEMENTING THE ABOVE CODE
           <div className="w-full flex items-center justify-center h-[50vh]">
             <h1>Reviews are to be implemented yet.</h1>
           </div>

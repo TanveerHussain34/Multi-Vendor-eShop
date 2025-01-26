@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import ProductCard from "../components/Route/ProductCard/ProductCard";
 import { useSelector } from "react-redux";
 import Loader from "../components/Layout/Loader";
+import Footer from "../components/Layout/Footer";
 
 function ProductPage() {
   const [searchParams] = useSearchParams();
@@ -15,7 +16,7 @@ function ProductPage() {
   useEffect(() => {
     if (categoryData === null) {
       const d =
-        allProducts && allProducts.sort((a, b) => a.soldOut - b.soldOut);
+        allProducts && [...allProducts].sort((a, b) => a.soldOut - b.soldOut);
       setData(d);
     } else {
       const d =
@@ -43,6 +44,7 @@ function ProductPage() {
               </h1>
             ) : null}
           </div>
+          <Footer />
         </div>
       )}
     </>
