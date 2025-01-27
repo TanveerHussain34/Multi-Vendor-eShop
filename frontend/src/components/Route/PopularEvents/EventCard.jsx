@@ -5,7 +5,7 @@ import CountDown from "./CountDown.jsx";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { backendUrl } from "../../../server.js";
 
-function EventCard({ active, data }) {
+function EventCard({ active, data, moreEvents }) {
   return (
     <div
       className={`w-full block bg-white rounded-lg ${
@@ -44,9 +44,9 @@ function EventCard({ active, data }) {
             Buy Now
           </button>
         </div>
-        <div className="flex justify-end mt-6">
+        <div className={`flex justify-end mt-6 ${moreEvents ? "" : "hidden"}`}>
           <Link
-            to="/"
+            to="/events"
             className="text-[#333] text-[17px] mr-3 flex items-center"
           >
             See More Events{" "}

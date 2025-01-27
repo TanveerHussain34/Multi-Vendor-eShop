@@ -13,7 +13,7 @@ function PopularEvents() {
             <h1>Popular Events</h1>
           </div>
           <div className="w-full grid">
-            <EventCard data={allEvents && allEvents[0]} />
+            <EventCard data={allEvents && allEvents[1]} moreEvents={true} />
           </div>
         </div>
       )}

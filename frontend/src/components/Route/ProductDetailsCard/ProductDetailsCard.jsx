@@ -9,11 +9,16 @@ import {
 } from "react-icons/ai";
 import { backendUrl } from "../../../server";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCartThunk } from "../../../features/cart/cartThunks.js";
+import { toast } from "react-toastify";
 
 /* eslint-disable react/prop-types */
 function ProductDetailsCard({ open, setOpen, data }) {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
 
   const handleMessageButton = () => {};
 
@@ -24,6 +29,22 @@ function ProductDetailsCard({ open, setOpen, data }) {
   const incrementCount = () => {
     setCount(count + 1);
   };
+
+  const addToCartHandler = (id) => {
+    const isItemExist = cart && cart.find((i) => i._id === id);
+    if (isItemExist) {
+      toast.error("Item already in cart!");
+    } else {
+      if (data.stock < count) {
+        toast.error(`Product stock is limited!`);
+      } else {
+        const cartData = { ...data, qty: count };
+        dispatch(addToCartThunk(cartData));
+        toast.success("Item added to cart successfully!");
+      }
+    }
+  };
+
   return (
     <>
       {data ? (
@@ -124,6 +145,7 @@ function ProductDetailsCard({ open, setOpen, data }) {
                 </div>
                 <div
                   className={`${styles.button} mt-6 !rounded h-11 flex items-center`}
+                  onClick={() => addToCartHandler(data._id)}
                 >
                   <span className="text-white flex items-center">
                     Add to Cart <AiOutlineShoppingCart className="ml-1" />
