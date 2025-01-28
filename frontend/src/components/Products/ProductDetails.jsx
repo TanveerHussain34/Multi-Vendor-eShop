@@ -11,6 +11,8 @@ import {
 import { backendUrl } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsShop } from "../../features/product/productThunks";
+import { toast } from "react-toastify";
+import { addToCartThunk } from "../../features/cart/cartThunks";
 
 function ProductDetails({ data }) {
   const [count, setCount] = useState(1);
@@ -19,6 +21,7 @@ function ProductDetails({ data }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.product);
+  const { cart } = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(getAllProductsShop(data && data.shop._id));
@@ -35,6 +38,22 @@ function ProductDetails({ data }) {
   const handleMessageSubmit = () => {
     navigate("/inbox?conversation=507jdjh4k48fghk3487");
   };
+
+  const addToCartHandler = (id) => {
+    const isItemExist = cart && cart.find((i) => i._id === id);
+    if (isItemExist) {
+      toast.error("Item already in cart!");
+    } else {
+      if (data.stock < count) {
+        toast.error(`Product stock is limited!`);
+      } else {
+        const cartData = { ...data, qty: count };
+        dispatch(addToCartThunk(cartData));
+        toast.success("Item added to cart successfully!");
+      }
+    }
+  };
+
   return (
     <div className="bg-white">
       {data ? (
@@ -117,6 +136,7 @@ function ProductDetails({ data }) {
                 </div>
                 <div
                   className={`${styles.button} mt-6 !rounded h-11 flex items-center`}
+                  onClick={() => addToCartHandler(data._id)}
                 >
                   <span className="text-white flex items-center">
                     Add to Cart <AiOutlineShoppingCart className="ml-1" />

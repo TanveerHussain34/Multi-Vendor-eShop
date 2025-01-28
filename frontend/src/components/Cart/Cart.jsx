@@ -150,6 +150,7 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
         <RxCross1
           className="cursor-pointer"
           onClick={() => removeFromCartHandler(data)}
+          title="Remove from Cart"
         />
       </div>
     </div>

@@ -23,6 +23,7 @@ function ProductDetailsPage() {
       setData(data);
     }
   }, [allEvents, id, eventData, allProducts]);
+
   return (
     <div>
       <Header />

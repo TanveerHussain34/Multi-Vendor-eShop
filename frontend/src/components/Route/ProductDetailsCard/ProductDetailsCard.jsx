@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import styles from "../../../styles/styles";
 import {
@@ -12,13 +12,26 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCartThunk } from "../../../features/cart/cartThunks.js";
 import { toast } from "react-toastify";
+import {
+  addToWishlistThunk,
+  removeFromWishlistThunk,
+} from "../../../features/wishlist/wishlistThunks.js";
 
 /* eslint-disable react/prop-types */
 function ProductDetailsCard({ open, setOpen, data }) {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const { cart } = useSelector((state) => state.cart);
+  const { wishlist } = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (wishlist && wishlist.find((i) => i._id === data._id)) {
+      setClick(true);
+    } else {
+      setClick(false);
+    }
+  }, [wishlist, data._id]);
 
   const handleMessageButton = () => {};
 
@@ -43,6 +56,16 @@ function ProductDetailsCard({ open, setOpen, data }) {
         toast.success("Item added to cart successfully!");
       }
     }
+  };
+
+  const removeFromWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(removeFromWishlistThunk(data));
+  };
+
+  const addToWishlistHandler = () => {
+    setClick(!click);
+    dispatch(addToWishlistThunk(data));
   };
 
   return (
@@ -128,7 +151,7 @@ function ProductDetailsCard({ open, setOpen, data }) {
                       <AiFillHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={() => setClick(!click)}
+                        onClick={() => removeFromWishlistHandler(data)}
                         color={click ? "red" : "#333"}
                         title="Remove from Wishlist"
                       />
@@ -136,7 +159,7 @@ function ProductDetailsCard({ open, setOpen, data }) {
                       <AiOutlineHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={() => setClick(!click)}
+                        onClick={() => addToWishlistHandler(data)}
                         color={click ? "red" : "#333"}
                         title="Add to Wishlist"
                       />
