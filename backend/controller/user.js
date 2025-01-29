@@ -175,4 +175,126 @@ router.get(
   })
 );
 
+// update user profile
+router.put("/update-user-profile", isAuthenticated, async (req, res, next) => {
+  try {
+    const { name, email, phoneNumber, password } = req.body;
+
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+      return next(new ErrorHandler("User not found", 404));
+    }
+
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid) {
+      return next(new ErrorHandler("Invalid password!", 400));
+    }
+
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+
+    await user.save();
+
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+// update user avatar
+router.put(
+  "/update-user-avatar",
+  isAuthenticated,
+  upload.single("image"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const isUserExist = await User.findById(req.user.id);
+
+      const existingUserAvatarPath = isUserExist.avatar.url;
+
+      const fileName = req.file.filename;
+      const fileUrl = path.join("uploads", fileName);
+
+      const user = await User.findByIdAndUpdate(req.user.id, {
+        avatar: {
+          public_id: fileName,
+          url: fileUrl,
+        },
+      });
+
+      fs.unlinkSync(existingUserAvatarPath);
+
+      res.status(200).json({ success: true, user });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// update user address
+router.put(
+  "/update-user-address",
+  isAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.user.id);
+
+      const sameTypeAddress = user.addresses.find(
+        (address) => address.addressType === req.body.addressType
+      );
+
+      if (sameTypeAddress) {
+        return next(
+          new ErrorHandler(
+            `${req.body.addressType} address already exists!`,
+            400
+          )
+        );
+      }
+
+      const isAddressExists = user.addresses.find(
+        (address) => address._id === req.body._id
+      );
+
+      if (isAddressExists) {
+        Object.assign(isAddressExists, req.body);
+      } else {
+        user.addresses.push(req.body);
+      }
+
+      await user.save();
+
+      res.status(200).json({ success: true, user });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// delete user address
+router.put(
+  "/delete-user-address/:id",
+  isAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const userId = req.user._id;
+      const addressId = req.params.id;
+
+      await User.updateOne(
+        { _id: userId },
+        { $pull: { addresses: { _id: addressId } } }
+      );
+
+      const user = await User.findById(userId);
+
+      res.status(200).json({ success: true, user });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 module.exports = router;
