@@ -275,7 +275,7 @@ router.put(
 );
 
 // delete user address
-router.put(
+router.delete(
   "/delete-user-address/:id",
   isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
@@ -291,6 +291,33 @@ router.put(
       const user = await User.findById(userId);
 
       res.status(200).json({ success: true, user });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// change user password
+router.put(
+  `/change-user-password`,
+  isAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.user.id).select("+password");
+      const isPasswordValid = await user.comparePassword(
+        req.body.currentPassword
+      );
+      if (!isPasswordValid) {
+        return next(new ErrorHandler("Invalid password!", 400));
+      }
+      if (req.body.newPassword !== req.body.confirmNewPassword) {
+        return next(new ErrorHandler("Password does not match!", 400));
+      }
+      user.password = req.body.newPassword;
+      await user.save();
+      res
+        .status(200)
+        .json({ success: true, message: "Password changed successfully!" });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }

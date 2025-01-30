@@ -20,11 +20,11 @@ import { Country, City } from "country-state-city";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
-import { clearErrors } from "../../features/user/userSlice";
+import { clearErrors, clearMessages } from "../../features/user/userSlice";
 
 /* eslint-disable react/prop-types */
 function ProfileContent({ active }) {
-  const { user, error } = useSelector((state) => state.user);
+  const { user, error, successMessage } = useSelector((state) => state.user);
   const [name, setName] = useState((user && user.name) || "");
   const [email, setEmail] = useState((user && user.email) || "");
   const [phoneNumber, setPhoneNumber] = useState(
@@ -38,7 +38,11 @@ function ProfileContent({ active }) {
       toast.error(error);
       dispatch(clearErrors());
     }
-  }, [error, dispatch]);
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(clearMessages());
+    }
+  }, [error, successMessage, dispatch]);
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -97,7 +101,7 @@ function ProfileContent({ active }) {
           <br />
           <br />
           <div className="w-full px-5">
-            <form onSubmit={handleUpdateProfile} aria-required={true}>
+            <form aria-required onSubmit={handleUpdateProfile}>
               <div className="w-full block 800px:flex justify-between">
                 <div className="w-full 800px:w-[48%] pb-3">
                   <label htmlFor="name" className="block pb-2">
@@ -161,7 +165,7 @@ function ProfileContent({ active }) {
                 <input
                   className="w-full 800px:w-[48%] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded mt-8 cursor-pointer"
                   required
-                  value="Update"
+                  value="Update Profile"
                   type="submit"
                 />
               </div>
@@ -191,10 +195,10 @@ function ProfileContent({ active }) {
         </div>
       )}
 
-      {/* Payment Methods */}
+      {/* Change Password */}
       {active == 6 && (
         <div>
-          <PaymentMethods />
+          <ChangePassword />
         </div>
       )}
 
@@ -559,33 +563,94 @@ const TrackOrders = () => {
   );
 };
 
-const PaymentMethods = () => {
+const ChangePassword = () => {
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  const changePasswordHandler = async (e) => {
+    e.preventDefault();
+
+    await axios
+      .put(
+        `${server}/user/change-user-password`,
+        { currentPassword, newPassword, confirmNewPassword },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        toast.success(res.data.message);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmNewPassword("");
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.message);
+      });
+  };
+
   return (
     <div className="w-full px-5">
-      <div className="flex w-full items-center justify-between">
-        <h1 className="text-[25px] font-[600] text-[#000000ba] pb-2">
-          Payment Methods
-        </h1>
-        <div className={`${styles.button} !rounded-md`}>
-          <span className="text-white">Add New</span>
-        </div>
-      </div>
-      <br />
-      <div className="w-full bg-white h-[70px] rounded-[4px] px-3 shadow flex items-center justify-between">
-        <div className="flex items-center">
-          <img
-            src="https:bonik-react.vercel.app/assets/images/payment-methods/Visa.svg"
-            alt=""
-          />
-          <h5 className="pl-5 font[600]">Tanveer Hussain</h5>
-        </div>
-        <div className="pl-8 flex items-center">
-          <h6>4563 **** **** ****</h6>
-          <h5 className="pl-6">07/28</h5>
-        </div>
-        <div className="min-h-[10px] flex items-center justify-between pl-8">
-          <AiOutlineDelete size={25} className="cursor-pointer" />
-        </div>
+      <h1 className="text-center text-[25px] font-[600] text-[#000000ba] pb-2">
+        Change Password
+      </h1>
+      <div className="w-full">
+        <form
+          aria-required
+          onSubmit={changePasswordHandler}
+          className="flex flex-col items-center"
+        >
+          <div className="w-full 800px:w-[50%] pb-3 mt-5">
+            <label htmlFor="currentPassword" className="block pb-2">
+              Current Password
+            </label>
+            <input
+              type="password"
+              id="currentPassword"
+              className={`${styles.input}`}
+              required
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+          </div>
+
+          <div className="w-full 800px:w-[50%] pb-3">
+            <label htmlFor="newPassword" className="block pb-2">
+              New Password
+            </label>
+            <input
+              type="password"
+              id="newPassword"
+              className={`${styles.input}`}
+              required
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </div>
+
+          <div className="w-full 800px:w-[50%] pb-3">
+            <label htmlFor="confirmNewPassword" className="block pb-2">
+              Confirm New Password
+            </label>
+            <input
+              type="password"
+              id="confirmNewPassword"
+              className={`${styles.input}`}
+              required
+              value={confirmNewPassword}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
+            />
+          </div>
+
+          <div className="w-full 800px:w-[50%] pb-3">
+            <input
+              type="submit"
+              className="w-full h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded mt-8 cursor-pointer"
+              value={`Change Password`}
+              required
+              readOnly
+            />
+          </div>
+        </form>
       </div>
     </div>
   );
@@ -595,7 +660,7 @@ const Address = () => {
   const [open, setOpen] = useState(false);
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
-  const [zipCode, setZipCode] = useState();
+  const [zipCode, setZipCode] = useState(null);
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [addressType, setAddressType] = useState("");
@@ -604,16 +669,35 @@ const Address = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(
-      updateUserAddress(country, city, address1, address2, zipCode, addressType)
-    );
-    setOpen(false);
-    setCountry("");
-    setCity("");
-    setAddress1("");
-    setAddress2("");
-    setZipCode(null);
-    setAddressType("");
+
+    if (
+      country === "" ||
+      city === "" ||
+      address1 === "" ||
+      address2 === "" ||
+      zipCode === null ||
+      addressType === ""
+    ) {
+      toast.error("All fields are required!");
+    } else {
+      dispatch(
+        updateUserAddress(
+          country,
+          city,
+          address1,
+          address2,
+          zipCode,
+          addressType
+        )
+      );
+      setOpen(false);
+      setCountry("");
+      setCity("");
+      setAddress1("");
+      setAddress2("");
+      setZipCode(null);
+      setAddressType("");
+    }
   };
 
   const handleDelete = (item) => {
@@ -637,7 +721,7 @@ const Address = () => {
               Add New Address
             </h1>
             <div className="w-full">
-              <form onSubmit={handleSubmit}>
+              <form aria-required onSubmit={handleSubmit}>
                 <div className="w-full block p-4">
                   <div className="w-full pb-2">
                     <label htmlFor="country" className="block pb-2">
@@ -648,7 +732,7 @@ const Address = () => {
                       id="country"
                       value={country}
                       className={`${styles.input}`}
-                      required={true}
+                      required
                       onChange={(e) => setCountry(e.target.value)}
                     >
                       <option value="" className="block pb-2">
@@ -773,8 +857,8 @@ const Address = () => {
                   <div className={`w-full pb-2`} onClick={handleSubmit}>
                     <input
                       type="submit"
-                      className={`${styles.input} mt-5 cursor-pointer`}
-                      value="Submit"
+                      className="w-[100%] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded mt-8 cursor-pointer"
+                      value={"Add Address"}
                       required
                       readOnly
                     />
@@ -817,12 +901,18 @@ const Address = () => {
             <div className="min-h-[10px] flex items-center justify-between pl-8">
               <AiOutlineDelete
                 size={25}
+                title="Delete Address"
                 className="cursor-pointer"
                 onClick={() => handleDelete(item)}
               />
             </div>
           </div>
         ))}
+      {user && user.length < 1 && (
+        <h1 className="text-center text-[16px] text-[#000000ba] pt-6">
+          {`You don't have any saved addresses!`}
+        </h1>
+      )}
     </div>
   );
 };

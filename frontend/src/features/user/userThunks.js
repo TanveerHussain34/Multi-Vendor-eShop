@@ -67,7 +67,7 @@ export const updateUserAddress =
       );
       dispatch(
         updateUserAddressSuccess({
-          successMessage: "User address updated succesfully!",
+          successMessage: "User address added succesfully!",
           user: data.user,
         })
       );
@@ -84,11 +84,9 @@ export const updateUserAddress =
 export const deleteUserAddress = (id) => async (dispatch) => {
   try {
     dispatch(deleteUserAddressRequest());
-    const { data } = await axios.put(
+    const { data } = await axios.delete(
       `${server}/user/delete-user-address/${id}`,
-      {
-        withCredentials: true,
-      }
+      { withCredentials: true }
     );
     dispatch(
       deleteUserAddressSuccess({

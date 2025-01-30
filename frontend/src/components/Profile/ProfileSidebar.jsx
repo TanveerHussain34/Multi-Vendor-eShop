@@ -1,9 +1,6 @@
 /* eslint-disable react/prop-types */
-import {
-  AiOutlineCreditCard,
-  AiOutlineLogin,
-  AiOutlineMessage,
-} from "react-icons/ai";
+import { AiOutlineLogin, AiOutlineMessage } from "react-icons/ai";
+import { RiLockPasswordLine } from "react-icons/ri";
 import { HiOutlineShoppingBag, HiReceiptRefund } from "react-icons/hi";
 import { RxPerson } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
@@ -104,13 +101,13 @@ function ProfileSidebar({ active, setActive }) {
         className="flex items-center cursor-pointer w-full mb-8"
         onClick={() => setActive(6)}
       >
-        <AiOutlineCreditCard size={20} color={active === 6 ? "red" : null} />
+        <RiLockPasswordLine size={20} color={active === 6 ? "red" : null} />
         <span
           className={`pl-3 ${
             active === 6 ? "text-[red]" : null
           } hidden 800px:block`}
         >
-          Payment Methods
+          Change Password
         </span>
       </div>
 
