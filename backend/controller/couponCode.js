@@ -72,14 +72,13 @@ router.delete(
 // get coupon code value/discount %age by its name
 router.get(
   "/get-coupon-value/:name",
-  isSellerAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const coupons = await CouponCode.findOne({
+      const couponCode = await CouponCode.findOne({
         name: req.params.name,
       });
 
-      res.status(200).json({ success: true, coupons });
+      res.status(200).json({ success: true, couponCode });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
     }

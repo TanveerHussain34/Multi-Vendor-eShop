@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 import { Country, City } from "country-state-city";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { server } from "../../server";
 
 function Checkout() {
   const { user } = useSelector((state) => state.user);
@@ -37,18 +39,15 @@ function Checkout() {
         country,
         city,
       };
-
       const orderData = {
         cart,
         totalPrice,
         subTotalPrice,
-        shipping,
+        shippingPrice,
         discountPrice,
         shippingAddress,
         user,
       };
-
-      // update local storage with the updated orders array
       localStorage.setItem("latestOrder", JSON.stringify(orderData));
       navigate("/payment");
     }
@@ -59,18 +58,43 @@ function Checkout() {
     0
   );
 
-  // this is shipping cost variable
-  const shipping = subTotalPrice * 0.1;
+  const shippingPrice = subTotalPrice * 0.1; // 10% of price without shipping charges
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const name = couponCode;
+    await axios
+      .get(`${server}/couponCode/get-coupon-value/${name}`)
+      .then((res) => {
+        const shopId = res.data.couponCode?.shopId;
+        const couponCodeValue = res.data.couponCode?.value;
+        if (res.data.couponCode !== null) {
+          const isCouponValid =
+            cart && cart.filter((item) => item.shopId === shopId);
+          if (isCouponValid.length === 0) {
+            toast.error("Coupon code is not valid for this shop!");
+            setCouponCode("");
+          } else {
+            const eligiblePrice = isCouponValid.reduce(
+              (acc, item) => acc + item.qty * item.discountPrice,
+              0
+            );
+            setDiscountPrice((eligiblePrice * couponCodeValue) / 100);
+            setCouponCodeData(res.data.couponCode);
+            setCouponCode("");
+          }
+        }
+        if (couponCode === null) {
+          toast.error("Invalid coupon code!");
+        }
+      });
   };
 
   const discountPercentage = couponCodeData ? discountPrice : "";
 
   const totalPrice = couponCodeData
-    ? (subTotalPrice + shipping - discountPercentage).toFixed(2)
-    : (subTotalPrice + shipping).toFixed(2);
+    ? (subTotalPrice + shippingPrice - discountPercentage).toFixed(2)
+    : (subTotalPrice + shippingPrice).toFixed(2);
 
   return (
     <div className="w-full flex flex-col items-center py-8">
@@ -96,7 +120,7 @@ function Checkout() {
           <CartData
             handleSubmit={handleSubmit}
             totalPrice={totalPrice}
-            shipping={shipping}
+            shippingPrice={shippingPrice}
             subTotalPrice={subTotalPrice}
             couponCode={couponCode}
             setCouponCode={setCouponCode}
@@ -270,7 +294,7 @@ const ShippingInfo = ({
       >
         Use saved address instead?
       </h5>
-      {userInfo ? (
+      {userInfo && (
         <div>
           {user &&
             user.addresses.map((item, index) => (
@@ -292,12 +316,6 @@ const ShippingInfo = ({
               </div>
             ))}
         </div>
-      ) : (
-        setCountry("") ||
-        setCity("") ||
-        setAddress1("") ||
-        setAddress2("") ||
-        setZipCode("")
       )}
     </div>
   );
@@ -306,7 +324,7 @@ const ShippingInfo = ({
 const CartData = ({
   handleSubmit,
   totalPrice,
-  shipping,
+  shippingPrice,
   subTotalPrice,
   couponCode,
   setCouponCode,
@@ -325,7 +343,7 @@ const CartData = ({
         <h3 className="text-[16px] font-[400] text-[#000000a4]">
           Shipping Charges:
         </h3>
-        <h5 className="text-[18px] font-[600]">${shipping.toFixed(2)}</h5>
+        <h5 className="text-[18px] font-[600]">${shippingPrice.toFixed(2)}</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">
