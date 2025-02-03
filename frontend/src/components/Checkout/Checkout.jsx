@@ -343,7 +343,7 @@ const CartData = ({
         <h3 className="text-[16px] font-[400] text-[#000000a4]">
           Shipping Charges:
         </h3>
-        <h5 className="text-[18px] font-[600]">${shippingPrice.toFixed(2)}</h5>
+        <h5 className="text-[18px] font-[600]">${shippingPrice?.toFixed(2)}</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">

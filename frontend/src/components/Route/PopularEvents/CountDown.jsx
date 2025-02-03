@@ -13,8 +13,8 @@ function CountDown({ data }) {
 
   function calculateTimeLeft() {
     const now = new Date();
-    const start = new Date(data.startDate);
-    const finish = new Date(data.finishDate);
+    const start = new Date(data?.startDate);
+    const finish = new Date(data?.finishDate);
     let timeLeft = {};
 
     if (now >= start && now <= finish) {

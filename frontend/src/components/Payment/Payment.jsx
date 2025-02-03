@@ -1,22 +1,52 @@
 /* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
 import styles from "../../styles/styles";
-import { useSelector } from "react-redux";
-import { Country, City } from "country-state-city";
-import { useState } from "react";
-import { toast } from "react-toastify";
-import axios from "axios";
-import { server } from "../../server";
+import { useEffect, useState } from "react";
+import {
+  CardNumberElement,
+  CardCvcElement,
+  CardExpiryElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 
 function Payment() {
+  const [orderData, setOrderData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const { user } = useSelector((state) => state.user);
+  const stripe = useStripe();
+  const elements = useElements();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const orderData = JSON.parse(localStorage.getItem("latestOrder"));
+    setOrderData(orderData);
+  }, []);
+
+  const onApprove = () => {};
+
+  const createOrder = () => {};
+
+  const paymentHandler = () => {};
+
+  const cashOnDeliveryHandler = () => {};
+
   return (
     <div className="w-full flex flex-col items-center py-8">
       <div className="w-[90%] 1000px:w-[70%] block 800px:flex">
         <div className="w-full 800px:w-[65%]">
-          <PaymentInfo />
+          <PaymentInfo
+            user={user}
+            open={open}
+            setOpen={setOpen}
+            onApprove={onApprove}
+            createOrder={createOrder}
+            paymentHandler={paymentHandler}
+            cashOnDeliveryHandler={cashOnDeliveryHandler}
+          />
         </div>
         <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
-          <CartData />
+          <CartData orderData={orderData} />
         </div>
       </div>
     </div>
@@ -173,46 +203,40 @@ const PaymentInfo = () => {
   );
 };
 
-const CartData = ({
-  handleSubmit,
-  totalPrice,
-  shippingPrice,
-  subTotalPrice,
-  couponCode,
-  setCouponCode,
-  discountPercentage,
-}) => {
+const CartData = ({ orderData }) => {
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">
           Total Price:
         </h3>
-        {/* <h5 className="text-[18px] font-[600]">${subTotalPrice}</h5> */}
+        <h5 className="text-[18px] font-[600]">${orderData?.subTotalPrice}</h5>
       </div>
       <br />
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">
           Shipping Charges:
         </h3>
-        {/* <h5 className="text-[18px] font-[600]">${shippingPrice.toFixed(2)}</h5> */}
+        <h5 className="text-[18px] font-[600]">
+          ${orderData?.shippingPrice?.toFixed(2)}
+        </h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Discount:</h3>
-        <h5 className="text-[18px] font-[600]">
-          {/* - {discountPercentage ? "$" + discountPercentage.toString() : null} */}
-        </h5>
+        <h5 className="text-[18px] font-[600]">- {orderData?.discountPrice}</h5>
       </div>
-      {/* <h5 className="text-[18px] font-[600] text-end pt-3">${totalPrice}</h5> */}
+      <h5 className="text-[18px] font-[600] text-end pt-3">
+        ${orderData?.totalPrice}
+      </h5>
       <br />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <input
           type="text"
           className={`${styles.input} h-[40px] pl-2`}
           placeholder="Coupoun code"
-          //   value={couponCode}
-          //   onChange={(e) => setCouponCode(e.target.value)}
+          value="couponCode"
+          onChange={(e) => console.log(e.target.value)}
           required
         />
         <input

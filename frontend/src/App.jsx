@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { useDispatch } from "react-redux";
 import { loadUser } from "./features/user/userThunks.js";
@@ -36,23 +36,48 @@ import { loadSeller } from "./features/seller/sellerThunks.js";
 import SellerProtectedRoute from "./routes/protectedRoutes/SellerProtectedRoute.jsx";
 import { getAllProducts } from "./features/product/productThunks.js";
 import { getAllEvents } from "./features/event/eventThunks.js";
-// import AdminProtectedRoute from "./routes/protectedRoutes/AdminProtectedRoute.jsx";
+import { server } from "./server.js";
+import axios from "axios";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 function App() {
   const dispatch = useDispatch();
+  const [stripeApiKey, setStripeApiKey] = useState("");
+
+  async function getStripeApiKey() {
+    const { data } = await axios.get(`${server}/payment/stripeapikey`);
+    setStripeApiKey(data.stripeApiKey);
+  }
 
   useEffect(() => {
     dispatch(loadUser());
     dispatch(loadSeller());
     dispatch(getAllProducts());
     dispatch(getAllEvents());
+    getStripeApiKey();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <>
       <BrowserRouter
         future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
       >
+        {stripeApiKey && (
+          <Elements stripe={loadStripe(stripeApiKey)}>
+            <Routes>
+              <Route
+                path="/payment"
+                element={
+                  <ProtectedRoute>
+                    <PaymentPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Elements>
+        )}
         <Routes>
           {/* user routes */}
           <Route path="/" element={<HomePage />} />
@@ -71,7 +96,6 @@ function App() {
           <Route path="/best-selling" element={<BestSellingPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/faqs" element={<FAQsPage />} />
-          <Route path="/payment" element={<PaymentPage />} />
           <Route
             path="/profile"
             element={
