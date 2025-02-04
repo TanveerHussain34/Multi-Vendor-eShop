@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
 import { clearErrors, clearMessages } from "../../features/user/userSlice";
+import { getAllOrdersUser } from "../../features/order/orderThunks";
 
 /* eslint-disable react/prop-types */
 function ProfileContent({ active }) {
@@ -213,47 +214,13 @@ function ProfileContent({ active }) {
 }
 
 const AllOrders = () => {
-  const orders = [
-    {
-      _id: "7463hvbfbhfbrtr28820221",
-      orderItems: [
-        {
-          name: "IPhone 14 Pro Max",
-        },
-      ],
-      totalPrice: 350,
-      orderStatus: "Processing",
-    },
-    {
-      _id: "7463hvbfbhfbrtr28820222",
-      orderItems: [
-        {
-          name: "IPhone 14 Pro Max",
-        },
-        {
-          name: "IPhone 14 Pro Max",
-        },
-        {
-          name: "IPhone 14 Pro Max",
-        },
-      ],
-      totalPrice: 200,
-      orderStatus: "Delivered",
-    },
-    {
-      _id: "7463hvbfbhfbrtr28820223",
-      orderItems: [
-        {
-          name: "IPhone 14 Pro Max",
-        },
-        {
-          name: "IPhone 14 Pro Max",
-        },
-      ],
-      totalPrice: 150,
-      orderStatus: "Processing",
-    },
-  ];
+  const { orders } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllOrdersUser(user._id));
+  });
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -312,9 +279,9 @@ const AllOrders = () => {
     orders.forEach((item) => {
       rows.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
+        itemsQty: item.cart.length,
         total: "US$ " + item.totalPrice,
-        status: item.orderStatus,
+        status: item.status,
       });
     });
   return (

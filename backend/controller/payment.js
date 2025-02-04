@@ -10,7 +10,7 @@ router.post(
     const myPayment = await stripe.paymentIntents.create({
       amount: req.body.amount,
       currency: "usd",
-      metadeta: {
+      metadata: {
         company: "Oshopo",
       },
     });

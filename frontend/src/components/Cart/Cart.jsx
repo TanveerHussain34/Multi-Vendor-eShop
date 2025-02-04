@@ -50,21 +50,23 @@ function Cart({ setOpenCart }) {
                   {cart && cart.length} Items
                 </h5>
               </div>
+
               {/* cart single item */}
-              <br />
-              <div className="w-full border-t">
-                {cart &&
-                  cart.map((i, index) => (
-                    <CartSingle
-                      key={index}
-                      data={i}
-                      quantityChangeHandler={quantityChangeHandler}
-                      removeFromCartHandler={removeFromCartHandler}
-                    />
-                  ))}
+              <div className="flex-1 overflow-y-auto max-h-[calc(100vh-175px)]">
+                <div className="w-full border-t">
+                  {cart &&
+                    cart.map((i, index) => (
+                      <CartSingle
+                        key={index}
+                        data={i}
+                        quantityChangeHandler={quantityChangeHandler}
+                        removeFromCartHandler={removeFromCartHandler}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
-            <div className="px-5 mb-3">
+            <div className="px-5 py-3 sticky bottom-0">
               {/* checkout button */}
               <Link to="/checkout">
                 <div className="h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]">

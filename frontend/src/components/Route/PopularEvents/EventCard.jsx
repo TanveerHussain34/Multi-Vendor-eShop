@@ -4,8 +4,29 @@ import styles from "../../../styles/styles";
 import CountDown from "./CountDown.jsx";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { backendUrl } from "../../../server.js";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCartThunk } from "../../../features/cart/cartThunks.js";
 
 function EventCard({ active, data, moreEvents }) {
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  const addToCartHandler = (id) => {
+    const isItemExist = cart && cart.find((i) => i._id === id);
+    if (isItemExist) {
+      toast.error("Item already in cart!");
+    } else {
+      if (data.stock < 1) {
+        toast.error(`Product stock is limited!`);
+      } else {
+        const cartData = { ...data, qty: 1 };
+        dispatch(addToCartThunk(cartData));
+        toast.success("Item added to cart successfully!");
+      }
+    }
+  };
+
   return (
     <div
       className={`w-full block bg-white rounded-lg ${
@@ -33,15 +54,17 @@ function EventCard({ active, data, moreEvents }) {
         </div>
         <CountDown data={data} />
         <div className="w-full flex justify-start space-x-10">
-          <button
+          <Link
+            to={`/product/${data._id}?isEvent=true`}
             className={`${styles.button} text-white mt-6 rounded-sm h-11 flex items-center`}
           >
             See Details
-          </button>
+          </Link>
           <button
             className={`${styles.button} text-white mt-6 rounded-sm h-11 flex items-center`}
+            onClick={() => addToCartHandler(data._id)}
           >
-            Buy Now
+            Add to Cart
           </button>
         </div>
         <div className={`flex justify-end mt-6 ${moreEvents ? "" : "hidden"}`}>
