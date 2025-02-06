@@ -19,6 +19,8 @@ function OrderDetails() {
 
   const data = ordersShop && ordersShop.find((order) => order._id === id);
 
+  const statusUpdateHandler = () => {};
+
   return (
     <div className={`py-4 min-h-screen ${styles.section}`}>
       <div className="w-full flex items-center justify-between">
@@ -69,11 +71,46 @@ function OrderDetails() {
       <br />
       <div className="w-full 800px:flex items-center">
         <div className="w-full 800px:w-[60%]">
-          <h4 className="pt-3 text-[20px] font-[600]">
-            Shipping Address: {data?.shippingAddress}
+          <h4 className="pt-3 text-[20px] font-[600]">Shipping Address:</h4>
+          <h4 className="pt-3 text-[20px]">
+            {data?.shippingAddress.address1 +
+              " " +
+              data?.shippingAddress.address2}
           </h4>
-          <h4 className="pt-3 text-[20px]"></h4>
+          <h4 className="text-[20px]">{data?.shippingAddress.country}</h4>
+          <h4 className="text-[20px]">{data?.shippingAddress.city}</h4>
+          <h4 className="text-[20px]">{data?.user?.phoneNumber}</h4>
         </div>
+        <div className="w-full 800px:w-[40%]">
+          <h4 className="pt-3 text-[20px]">Payment Information:</h4>
+          <h4 className="pt-3 text-[20px]">
+            Status: {data?.paymentInfo?.status}
+          </h4>
+        </div>
+      </div>
+      <br />
+      <br />
+      <h4 className="pt-3 text-[20px] font-[600]">Order Status:</h4>
+      <select
+        name=""
+        id=""
+        value={status}
+        onChange={(e) => setStatus(e.target.value)}
+        className="w-[20%] !p-[5px] !rounded-[4px] !border-[1px] !border-[#00000084] !outline-none"
+      >
+        {["Processing", "Shipped", "Delivered", "Cancelled"]
+          .slice(["Processing", "Shipped", "Delivered", "Cancelled"])
+          .map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+      </select>
+      <div
+        className={`${styles.button} !bg-[#fce1e6] !rounded-[4px] text-[#e94560] font-[600] !h-[45px] text-[18px]`}
+        onClick={statusUpdateHandler}
+      >
+        Update Status
       </div>
     </div>
   );
