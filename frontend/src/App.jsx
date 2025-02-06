@@ -26,10 +26,12 @@ import {
   ShopLoginPage,
   ShopCreateProduct,
   ShopAllProducts,
+  ShopAllOrders,
   ShopCreateEvent,
   ShopAllEvents,
   ShopAllCoupons,
   ShopPreviewPage,
+  ShopOrderDetails,
 } from "./routes/shopRoutes/shopRoutes.js";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./routes/protectedRoutes/ProtectedRoute.jsx";
@@ -154,6 +156,22 @@ function App() {
             element={
               <SellerProtectedRoute>
                 <ShopAllProducts />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/all-orders"
+            element={
+              <SellerProtectedRoute>
+                <ShopAllOrders />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/order/:id"
+            element={
+              <SellerProtectedRoute>
+                <ShopOrderDetails />
               </SellerProtectedRoute>
             }
           />

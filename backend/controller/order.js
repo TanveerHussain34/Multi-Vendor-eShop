@@ -45,7 +45,7 @@ router.post(
   })
 );
 
-// get all orders
+// get all orders for user
 router.get(
   "/get-all-orders-user/:userId",
   catchAsyncErrors(async (req, res, next) => {
@@ -55,7 +55,24 @@ router.get(
       });
       res.status(200).json({ success: true, orders });
     } catch (error) {
-      return next(new ErrorHandler(error.message, 400));
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// get all orders for shop
+router.get(
+  "/get-all-orders-shop/:shopId",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const orders = await Order.find({
+        "cart.shopId": req.params.shopId,
+      }).sort({
+        createdAt: -1,
+      });
+      res.status(200).json({ success: true, orders });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );

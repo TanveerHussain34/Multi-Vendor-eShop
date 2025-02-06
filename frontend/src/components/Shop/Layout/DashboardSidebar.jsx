@@ -29,7 +29,7 @@ function DashboardSidebar({ active }) {
 
       <div className="w-full flex items-center p-4">
         <Link
-          to="/dashboard/orders"
+          to="/dashboard/all-orders"
           className={`w-full flex items-center ${
             active === 2 ? "text-[crimson]" : "text-[#555]"
           }`}

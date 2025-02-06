@@ -8,7 +8,7 @@ const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
-    // get all products for a shop
+    // get all orders for a user
     getAllOrdersUserRequest: (state) => {
       state.isLoading = true;
     },
@@ -20,6 +20,19 @@ const orderSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+
+    // get all orders for a shop
+    getAllOrdersShopRequest: (state) => {
+      state.isLoading = true;
+    },
+    getAllOrdersShopSuccess: (state, action) => {
+      state.isLoading = false;
+      state.ordersShop = action.payload;
+    },
+    getAllOrdersShopFail: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -28,6 +41,9 @@ export const {
   getAllOrdersUserRequest,
   getAllOrdersUserSuccess,
   getAllOrdersUserFail,
+  getAllOrdersShopRequest,
+  getAllOrdersShopSuccess,
+  getAllOrdersShopFail,
   clearErrors,
 } = orderSlice.actions;
 
