@@ -15,16 +15,15 @@ function EventsPage() {
       {!isLoading && (
         <div>
           <Header activeHeading={4} />
-          <EventCard
-            active={true}
-            data={allEvents && allEvents[0]}
-            moreEvents={false}
-          />
-          <EventCard
-            active={true}
-            data={allEvents && allEvents[0]}
-            moreEvents={false}
-          />
+          {allEvents &&
+            allEvents.map((event, index) => (
+              <EventCard
+                key={index}
+                active={true}
+                data={event}
+                moreEvents={false}
+              />
+            ))}
           <Footer />
         </div>
       )}

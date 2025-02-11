@@ -21,6 +21,7 @@ import { RxCross1 } from "react-icons/rx";
 
 function Header({ activeHeading }) {
   const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { isSellerAuthenticated } = useSelector((state) => state.seller);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
   const [active, setActive] = useState(false);
@@ -104,11 +105,19 @@ function Header({ activeHeading }) {
           </div>
           {/* button */}
           <div className={`${styles.button}`}>
-            <Link to={`/shop-create`}>
-              <h1 className="text-white flex items-center">
-                Become Seller <IoIosArrowForward className="ml-1" />
-              </h1>
-            </Link>
+            {isSellerAuthenticated ? (
+              <Link to={`/dashboard`}>
+                <h1 className="text-white flex items-center">
+                  Go to Dashboard
+                </h1>
+              </Link>
+            ) : (
+              <Link to={`/shop-create`}>
+                <h1 className="text-white flex items-center">
+                  Become Seller <IoIosArrowForward className="ml-1 mt-1" />
+                </h1>
+              </Link>
+            )}
           </div>
         </div>
       </div>

@@ -1,25 +1,42 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styles from "../../styles/styles";
 import { BsFillBagFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getAllOrdersShop } from "../../features/order/orderThunks";
-import { backendUrl } from "../../server";
+import { backendUrl, server } from "../../server";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-function OrderDetails() {
+function ShopOrderDetails() {
   const { ordersShop } = useSelector((state) => state.order);
   const { seller } = useSelector((state) => state.seller);
   const dispatch = useDispatch();
   const [status, setStatus] = useState("");
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getAllOrdersShop(seller?._id));
-  });
+  }, [dispatch, seller?._id]);
 
   const data = ordersShop && ordersShop.find((order) => order._id === id);
 
-  const statusUpdateHandler = () => {};
+  const statusUpdateHandler = async () => {
+    await axios
+      .put(
+        `${server}/order/update-order-status/${id}`,
+        { status },
+        { withCredentials: true }
+      )
+      .then(() => {
+        toast.success("Order status updated successfully");
+        navigate("/dashboard/all-orders");
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
+  };
 
   return (
     <div className={`py-4 min-h-screen ${styles.section}`}>
@@ -83,8 +100,9 @@ function OrderDetails() {
         </div>
         <div className="w-full 800px:w-[40%]">
           <h4 className="pt-3 text-[20px]">Payment Information:</h4>
-          <h4 className="pt-3 text-[20px]">
-            Status: {data?.paymentInfo?.status}
+          <h4>
+            Status:{" "}
+            {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Unpaid"}
           </h4>
         </div>
       </div>
@@ -96,10 +114,10 @@ function OrderDetails() {
         id=""
         value={status}
         onChange={(e) => setStatus(e.target.value)}
-        className="w-[20%] !p-[5px] !rounded-[4px] !border-[1px] !border-[#00000084] !outline-none"
+        className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
       >
-        {["Processing", "Shipped", "Delivered", "Cancelled"]
-          .slice(["Processing", "Shipped", "Delivered", "Cancelled"])
+        {["Processing", "Shipped", "Delivered"]
+          .slice(["Processing", "Shipped", "Delivered"].indexOf(data?.status))
           .map((option, index) => (
             <option key={index} value={option}>
               {option}
@@ -116,4 +134,4 @@ function OrderDetails() {
   );
 }
 
-export default OrderDetails;
+export default ShopOrderDetails;
