@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styles from "../../styles/styles";
 import { BsFillBagFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,6 @@ function ShopOrderDetails() {
   const dispatch = useDispatch();
   const [status, setStatus] = useState("");
   const { id } = useParams();
-  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getAllOrdersShop(seller?._id));
@@ -22,16 +21,32 @@ function ShopOrderDetails() {
 
   const data = ordersShop && ordersShop.find((order) => order._id === id);
 
-  const statusUpdateHandler = async () => {
+  const orderStatusUpdateHandler = async () => {
     await axios
       .put(
         `${server}/order/update-order-status/${id}`,
         { status },
         { withCredentials: true }
       )
-      .then(() => {
-        toast.success("Order status updated successfully");
-        navigate("/dashboard/all-orders");
+      .then((res) => {
+        toast.success(res?.data?.message);
+        dispatch(getAllOrdersShop(seller?._id));
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      });
+  };
+
+  const refundStatusUpdateHandler = async () => {
+    await axios
+      .put(
+        `${server}/order/order-refund-success/${id}`,
+        { status },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        toast.success(res?.data?.message);
+        dispatch(getAllOrdersShop(seller?._id));
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message);
@@ -109,6 +124,28 @@ function ShopOrderDetails() {
       <br />
       <br />
       <h4 className="pt-3 text-[20px] font-[600]">Order Status:</h4>
+      {data &&
+        data?.status !== "Refund Processing" &&
+        data?.status !== "Refund Successful" && (
+          <select
+            name=""
+            id=""
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
+          >
+            {["Processing", "Shipped", "Delivered"]
+              .slice(
+                ["Processing", "Shipped", "Delivered"].indexOf(data?.status)
+              )
+              .map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+          </select>
+        )}
+
       <select
         name=""
         id=""
@@ -116,8 +153,10 @@ function ShopOrderDetails() {
         onChange={(e) => setStatus(e.target.value)}
         className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
       >
-        {["Processing", "Shipped", "Delivered"]
-          .slice(["Processing", "Shipped", "Delivered"].indexOf(data?.status))
+        {["Refund Processing", "Refund Successful"]
+          .slice(
+            ["Refund Processing", "Refund Successful"].indexOf(data?.status)
+          )
           .map((option, index) => (
             <option key={index} value={option}>
               {option}
@@ -126,7 +165,13 @@ function ShopOrderDetails() {
       </select>
       <div
         className={`${styles.button} !bg-[#fce1e6] !rounded-[4px] text-[#e94560] font-[600] !h-[45px] text-[18px]`}
-        onClick={statusUpdateHandler}
+        onClick={
+          data &&
+          data?.status !== "Refund Processing" &&
+          data?.status !== "Refund Successful"
+            ? orderStatusUpdateHandler
+            : refundStatusUpdateHandler
+        }
       >
         Update Status
       </div>

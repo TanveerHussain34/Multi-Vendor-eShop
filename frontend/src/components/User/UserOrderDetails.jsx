@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 function UserOrderDetails() {
   const { orders } = useSelector((state) => state.order);
   const { user } = useSelector((state) => state.user);
+  const { allProducts } = useSelector((state) => state.product);
   const dispatch = useDispatch();
   const { id } = useParams();
   const [open, setOpen] = useState(false);
@@ -35,16 +36,29 @@ function UserOrderDetails() {
           rating,
           comment,
           productId: selectedItem?._id,
-          orderId: id,
         },
         { withCredentials: true }
       )
       .then((res) => {
         toast.success(res?.data?.message);
-        dispatch(getAllOrdersUser(user?._id));
         setComment("");
         setRating(1);
         setOpen(false);
+      })
+      .catch((error) => {
+        toast.error(error?.response?.data?.message);
+      });
+  };
+
+  const refundHandler = async () => {
+    await axios
+      .put(
+        `${server}/order/apply-refund/${id}`,
+        { status: "Refund Processing" },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        toast.success(res?.data?.message);
       })
       .catch((error) => {
         toast.error(error?.response?.data?.message);
@@ -83,14 +97,28 @@ function UserOrderDetails() {
                 US${item.discountPrice} x {item.qty}
               </h5>
             </div>
-            {!item.isReviewed && item.status === "Delivered" && (
-              <div
-                className={`${styles.button} text-white`}
-                onClick={() => setOpen(true) || setSelectedItem(item)}
-              >
-                Give a Review
-              </div>
-            )}
+            {data?.status === "Delivered" &&
+              (() => {
+                const product = allProducts.find((p) => p._id === item._id);
+
+                if (!product) return null;
+
+                const hasReviewed = product.reviews.some(
+                  (review) => review?.user?._id === user?._id
+                );
+
+                return (
+                  <div
+                    className={`${styles.button} text-white`}
+                    onClick={() => {
+                      setOpen(true);
+                      setSelectedItem(product);
+                    }}
+                  >
+                    {hasReviewed ? "Update Review" : "Give a Review"}
+                  </div>
+                );
+              })()}
           </div>
         ))}
 
@@ -206,6 +234,14 @@ function UserOrderDetails() {
             Status:{" "}
             {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Unpaid"}
           </h4>
+          {data?.status === "Delivered" && (
+            <div
+              className={`${styles.button} text-white`}
+              onClick={refundHandler}
+            >
+              Apply Refund
+            </div>
+          )}
         </div>
       </div>
       <Link to={`/`}>

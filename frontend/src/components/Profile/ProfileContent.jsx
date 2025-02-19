@@ -297,47 +297,16 @@ const AllOrders = () => {
 };
 
 const AllRefunds = () => {
-  const orders = [
-    {
-      _id: "7463hvbfbhfbrtr28820221",
-      orderItems: [
-        {
-          name: "IPhone 14 Pro Max",
-        },
-      ],
-      totalPrice: 350,
-      orderStatus: "Processing",
-    },
-    {
-      _id: "7463hvbfbhfbrtr28820222",
-      orderItems: [
-        {
-          name: "IPhone 14 Pro Max",
-        },
-        {
-          name: "IPhone 14 Pro Max",
-        },
-        {
-          name: "IPhone 14 Pro Max",
-        },
-      ],
-      totalPrice: 200,
-      orderStatus: "Delivered",
-    },
-    {
-      _id: "7463hvbfbhfbrtr28820223",
-      orderItems: [
-        {
-          name: "IPhone 14 Pro Max",
-        },
-        {
-          name: "IPhone 14 Pro Max",
-        },
-      ],
-      totalPrice: 150,
-      orderStatus: "Processing",
-    },
-  ];
+  const { orders } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllOrdersUser(user._id));
+  }, [dispatch, user._id]);
+
+  const eligibleOrders =
+    orders && orders.filter((item) => item.status === "Refund Processing");
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -379,7 +348,7 @@ const AllRefunds = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/order/${params.id}`}>
+            <Link to={`/user/order/${params.id}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -392,13 +361,13 @@ const AllRefunds = () => {
 
   const rows = [];
 
-  orders &&
-    orders.forEach((item) => {
+  eligibleOrders &&
+    eligibleOrders.forEach((item) => {
       rows.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
+        itemsQty: item.cart.length,
         total: "US$ " + item.totalPrice,
-        status: item.orderStatus,
+        status: item.status,
       });
     });
   return (
@@ -414,47 +383,13 @@ const AllRefunds = () => {
 };
 
 const TrackOrders = () => {
-  const orders = [
-    {
-      _id: "7463hvbfbhfbrtr28820221",
-      orderItems: [
-        {
-          name: "IPhone 14 Pro Max",
-        },
-      ],
-      totalPrice: 350,
-      orderStatus: "Processing",
-    },
-    {
-      _id: "7463hvbfbhfbrtr28820222",
-      orderItems: [
-        {
-          name: "IPhone 14 Pro Max",
-        },
-        {
-          name: "IPhone 14 Pro Max",
-        },
-        {
-          name: "IPhone 14 Pro Max",
-        },
-      ],
-      totalPrice: 200,
-      orderStatus: "Delivered",
-    },
-    {
-      _id: "7463hvbfbhfbrtr28820223",
-      orderItems: [
-        {
-          name: "IPhone 14 Pro Max",
-        },
-        {
-          name: "IPhone 14 Pro Max",
-        },
-      ],
-      totalPrice: 150,
-      orderStatus: "Processing",
-    },
-  ];
+  const { orders } = useSelector((state) => state.order);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllOrdersUser(user._id));
+  }, [dispatch, user._id]);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -496,7 +431,7 @@ const TrackOrders = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/order/${params.id}`}>
+            <Link to={`/user/track-order/${params.id}`}>
               <Button>
                 <MdOutlineTrackChanges size={20} />
               </Button>
@@ -513,9 +448,9 @@ const TrackOrders = () => {
     orders.forEach((item) => {
       rows.push({
         id: item._id,
-        itemsQty: item.orderItems.length,
+        itemsQty: item.cart.length,
         total: "US$ " + item.totalPrice,
-        status: item.orderStatus,
+        status: item.status,
       });
     });
   return (

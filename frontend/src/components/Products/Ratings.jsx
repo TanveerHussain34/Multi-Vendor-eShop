@@ -2,11 +2,11 @@
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BsStarHalf } from "react-icons/bs";
 
-const Ratings = ({ ratings }) => {
+const Ratings = ({ rating }) => {
   const stars = [];
 
   for (let i = 1; i <= 5; i++) {
-    if (i <= ratings) {
+    if (i <= rating) {
       stars.push(
         <AiFillStar
           key={i}
@@ -15,7 +15,7 @@ const Ratings = ({ ratings }) => {
           className="mr-2 cursor-pointer"
         />
       );
-    } else if (i === Math.ceil(ratings) && !Number.isInteger(ratings)) {
+    } else if (i === Math.ceil(rating) && !Number.isInteger(rating)) {
       stars.push(
         <BsStarHalf
           key={i}
@@ -35,7 +35,7 @@ const Ratings = ({ ratings }) => {
       );
     }
   }
-  return <div className="flex"> {stars}</div>;
+  return <div className="flex">{stars}</div>;
 };
 
 export default Ratings;

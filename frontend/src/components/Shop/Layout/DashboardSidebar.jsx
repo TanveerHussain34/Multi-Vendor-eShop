@@ -167,7 +167,7 @@ function DashboardSidebar({ active }) {
 
       <div className="w-full flex items-center p-4">
         <Link
-          to="/dashboard/settings"
+          to="/settings"
           className={`w-full flex items-center ${
             active === 11 ? "text-[crimson]" : "text-[#555]"
           }`}

@@ -96,17 +96,68 @@ router.put("/update-order-status/:id", isSellerAuthenticated, catchAsyncErrors(a
     
     if(req.body.status === "Delivered"){
       order.deliveredAt = Date.now();
-      order.paymentInfo.status = "Succeeded";
+      order.paymentInfo.status = "Paid";
     }
     
     await order.save({validateBeforeSave: false});
     
-    res.status(200).json({success: true, order});
+    res.status(200).json({success: true, order, message: "Order status updated successfully"});
     
     async function updateOrder(id, qty){
       const product = await Product.findById(id);
-      product.stock -= qty;
-      product.soldOut += qty;
+      product.stock = Math.max((product.stock || 0) - qty, 0);
+      product.soldOut = Math.max((product.soldOut || 0) + qty, 0);
+      await product.save({validateBeforeSave: false});
+    }
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+}));
+
+// apply for refund
+router.put("/apply-refund/:id", isAuthenticated, catchAsyncErrors(async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    
+    if(!order){
+      return next(new ErrorHandler("Order not found", 404));
+    }
+    
+    order.status = req.body.status;
+    
+    await order.save({validateBeforeSave: false});
+    
+    res.status(200).json({success: true, order, message: "Refund request sent successfully"});
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+}));
+
+// accept refund request by seller
+router.put("/order-refund-success/:id", isSellerAuthenticated, catchAsyncErrors(async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if(!order){
+      return next(new ErrorHandler("Order not found", 404));
+    }
+
+    order.status = req.body.status;
+
+    await order.save();
+    
+    res.status(200).json({success: true, message: "Order refunded successfully"});
+    
+    if(req.body.status === "Refund Successful"){
+      order.cart.forEach(async (item) => {
+        await updateOrder(item._id, item.qty);
+      })
+    }
+    
+    async function updateOrder(id, qty){
+      const product = await Product.findById(id);
+      product.stock = Math.max((product.stock || 0) + qty, 0);
+      product.soldOut = Math.max((product.soldOut || 0) - qty, 0);
       await product.save({validateBeforeSave: false});
     }
   } catch (error) {

@@ -17,6 +17,7 @@ import {
   addToWishlistThunk,
   removeFromWishlistThunk,
 } from "../../features/wishlist/wishlistThunks";
+import Ratings from "./Ratings";
 
 function ProductDetails({ data }) {
   const [count, setCount] = useState(1);
@@ -63,6 +64,22 @@ function ProductDetails({ data }) {
       }
     }
   };
+
+  const totalReviewsLength =
+    products &&
+    products.reduce((acc, prodcut) => acc + prodcut.reviews.length, 0);
+
+  const totalRatings =
+    products &&
+    products.reduce(
+      (acc, prodcut) =>
+        acc + prodcut.reviews.reduce((sum, review) => sum + review.rating, 0),
+      0
+    );
+
+  const avgRatings = parseFloat(
+    (totalRatings / totalReviewsLength || 0).toFixed(1)
+  );
 
   const addToWishlistHandler = (data) => {
     setClick(!click);
@@ -194,7 +211,12 @@ function ProductDetails({ data }) {
             </div>
           </div>
           <div>
-            <ProductDetailsInfo data={data} products={products} />
+            <ProductDetailsInfo
+              data={data}
+              products={products}
+              totalReviewsLength={totalReviewsLength}
+              avgRatings={avgRatings}
+            />
             <br />
             <br />
           </div>
@@ -204,7 +226,12 @@ function ProductDetails({ data }) {
   );
 }
 
-const ProductDetailsInfo = ({ data, products }) => {
+const ProductDetailsInfo = ({
+  data,
+  products,
+  totalReviewsLength,
+  avgRatings,
+}) => {
   const [active, setActive] = useState(1);
 
   return (
@@ -253,8 +280,30 @@ const ProductDetailsInfo = ({ data, products }) => {
       ) : null}
 
       {active === 2 ? (
-        <div className="w-full justify-center min-h-[40vh] flex items-center">
-          <p>No reviews yet!</p>
+        <div className="w-full min-h-[40vh] flex flex-col items-center py-3">
+          {data &&
+            data.reviews.map((item, index) => (
+              <div className="w-full flex my-2" key={index}>
+                <img
+                  src={`${backendUrl}${item?.user?.avatar?.url}`}
+                  alt=""
+                  className="w-[50px] h-[50px] rounded-full mr-2"
+                />
+                <div>
+                  <div className="w-full flex items-center">
+                    <h4 className="font-[500] mr-3">{item?.user?.name}</h4>
+                    <Ratings rating={data?.ratings} />
+                  </div>
+                  <p className="text-[15px]">{item?.comment}</p>
+                </div>
+                <p className="text-[15px]">{item?.review}</p>
+              </div>
+            ))}
+          <div className="w-full flex justify-center">
+            {data && data.reviews.length === 0 && (
+              <h5 className="text-[15px]">No reviews yet!</h5>
+            )}
+          </div>
         </div>
       ) : null}
 
@@ -277,8 +326,8 @@ const ProductDetailsInfo = ({ data, products }) => {
                     </h3>
                   </Link>
                   <h5 className={`pb-3 text-[15px]`}>
-                    {/* ({data.shop.ratings}) Ratings */}
-                    (4/5) Ratings
+                    {/* ({data.shop.ratings}) Ratings */}({avgRatings}/5)
+                    Ratings
                   </h5>
                 </div>
               </div>
@@ -309,7 +358,8 @@ const ProductDetailsInfo = ({ data, products }) => {
               </h5>
               <h5 className="font-[600] pt-3">
                 {/* Total Reviews: <span className="font-[500]">{totalReviewsLength}</span> */}
-                Total Reviews: <span className="font-[500]">5</span>
+                Total Reviews:{" "}
+                <span className="font-[500]">{totalReviewsLength}</span>
               </h5>
               <Link to={`/shop/preview/${data.shop._id}`}>
                 <div

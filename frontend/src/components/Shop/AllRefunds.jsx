@@ -7,7 +7,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import Loader from "../Layout/Loader";
 import { getAllOrdersShop } from "../../features/order/orderThunks";
 
-function AllOrders() {
+function AllRefunds() {
   const { ordersShop, isLoading } = useSelector((state) => state.order);
   const { seller } = useSelector((state) => state.seller);
   const dispatch = useDispatch();
@@ -15,6 +15,14 @@ function AllOrders() {
   useEffect(() => {
     dispatch(getAllOrdersShop(seller?._id));
   }, [dispatch, seller]);
+
+  const eligibleOrders =
+    ordersShop &&
+    ordersShop.filter(
+      (item) =>
+        item.status === "Refund Processing" ||
+        item.status === "Refund Successful"
+    );
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -70,8 +78,8 @@ function AllOrders() {
 
   const rows = [];
 
-  ordersShop &&
-    ordersShop.forEach((item) => {
+  eligibleOrders &&
+    eligibleOrders.forEach((item) => {
       rows.push({
         id: item._id,
         itemsQty: item.cart.length,
@@ -98,4 +106,4 @@ function AllOrders() {
   );
 }
 
-export default AllOrders;
+export default AllRefunds;

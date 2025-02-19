@@ -10,6 +10,8 @@ import ShopAllCoupons from "../../pages/shopPages/ShopAllCoupons.jsx";
 import ShopPreviewPage from "../../pages/shopPages/ShopPreviewPage.jsx";
 import ShopAllOrders from "../../pages/shopPages/ShopAllOrders.jsx";
 import ShopOrderDetailsPage from "../../pages/shopPages/ShopOrderDetailsPage.jsx";
+import ShopRefundsPage from "../../pages/shopPages/ShopRefundsPage.jsx";
+import ShopSettingsPage from "../../pages/shopPages/ShopSettingsPage.jsx";
 
 export {
   ShopCreatePage,
@@ -24,4 +26,6 @@ export {
   ShopPreviewPage,
   ShopAllOrders,
   ShopOrderDetailsPage,
+  ShopRefundsPage,
+  ShopSettingsPage,
 };

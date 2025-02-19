@@ -93,7 +93,7 @@ function ProductCard({ data, isEvent }) {
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
           <div className="flex">
-            <Ratings ratings={data.ratings} />
+            <Ratings rating={data.ratings} />
           </div>
           <div className="py-2 flex items-center justify-between">
             <div className="flex">
@@ -107,7 +107,7 @@ function ProductCard({ data, isEvent }) {
               </h4>
             </div>
             <span className="font-[400] text-[17px] text-[#68d284]">
-              {data.soldOut ? data.soldOut + " sold" : null}
+              {data.soldOut + " sold"}
             </span>
           </div>
         </Link>
