@@ -197,4 +197,66 @@ router.get(
   })
 );
 
+// update shop avatar
+router.put(
+  "/update-shop-avatar",
+  isSellerAuthenticated,
+  upload.single("image"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const isShopExist = await Shop.findById(req.seller._id);
+
+      const existingShopAvatarPath = isShopExist.avatar.url;
+
+      const fileName = req.file.filename;
+      const fileUrl = path.join("uploads", fileName);
+
+      const shop = await Shop.findByIdAndUpdate(req.seller._id, {
+        avatar: {
+          public_id: fileName,
+          url: fileUrl,
+        },
+      });
+
+      fs.unlinkSync(existingShopAvatarPath);
+
+      res.status(200).json({ success: true, shop });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// update shop profile
+router.put("/update-shop-profile", isSellerAuthenticated, async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const { name, description, address, phoneNumber, zipCode } = req.body;
+
+    const shop = await Shop.findById({ email }).select("+password");
+
+    if (!shop) {
+      return next(new ErrorHandler("Shop not found", 404));
+    }
+
+    const isPasswordValid = await shop.comparePassword(password);
+
+    if (!isPasswordValid) {
+      return next(new ErrorHandler("Invalid password!", 400));
+    }
+
+    if (name) shop.name = name;
+    if (description) shop.description = description;
+    if (address) shop.address = address;
+    if (phoneNumber) shop.phoneNumber = phoneNumber;
+    if (zipCode) shop.zipCode = zipCode;
+
+    await shop.save();
+
+    res.status(200).json({ success: true, shop });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
 module.exports = router;

@@ -15,6 +15,7 @@ import {
   updateUserProfile,
   updateUserAddress,
   deleteUserAddress,
+  loadUser,
 } from "../../features/user/userThunks";
 import { Country, City } from "country-state-city";
 import { toast } from "react-toastify";
@@ -62,7 +63,7 @@ function ProfileContent({ active }) {
       .put(`${server}/user/update-user-avatar`, formData, config)
       .then(() => {
         toast.success("Avatar updated successfully");
-        window.location.reload();
+        dispatch(loadUser());
       })
       .catch((error) => {
         toast.error(error?.response?.data?.message);
@@ -156,6 +157,7 @@ function ProfileContent({ active }) {
                     id="password"
                     className={`${styles.input}`}
                     required
+                    placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />

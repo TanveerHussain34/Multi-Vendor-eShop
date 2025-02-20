@@ -12,6 +12,7 @@ import ShopAllOrders from "../../pages/shopPages/ShopAllOrders.jsx";
 import ShopOrderDetailsPage from "../../pages/shopPages/ShopOrderDetailsPage.jsx";
 import ShopRefundsPage from "../../pages/shopPages/ShopRefundsPage.jsx";
 import ShopSettingsPage from "../../pages/shopPages/ShopSettingsPage.jsx";
+import WithdrawMoneyPage from "../../pages/shopPages/WithdrawMoneyPage.jsx";
 
 export {
   ShopCreatePage,
@@ -28,4 +29,5 @@ export {
   ShopOrderDetailsPage,
   ShopRefundsPage,
   ShopSettingsPage,
+  WithdrawMoneyPage,
 };
