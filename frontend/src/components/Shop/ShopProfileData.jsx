@@ -5,6 +5,8 @@ import styles from "../../styles/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsShop } from "../../features/product/productThunks";
 import { getAllEventsShop } from "../../features/event/eventThunks";
+import Ratings from "../Products/Ratings";
+import { backendUrl } from "../../server";
 // import Ratings from "../Products/Ratings";
 
 /* eslint-disable react/prop-types */
@@ -20,8 +22,32 @@ function ShopProfileData({ isOwner }) {
     dispatch(getAllEventsShop(id));
   }, [dispatch, id]);
 
-  // const allReviews =
-  //   products && products.map((product) => product.reviews).flat();
+  const allReviews =
+    products && products.map((product) => product.reviews).flat();
+
+  const timeAgo = (timestamp) => {
+    const now = Date.now();
+    const secondsAgo = Math.floor((now - new Date(timestamp)) / 1000);
+
+    if (secondsAgo < 60) return "just now";
+    if (secondsAgo < 3600) return `${Math.floor(secondsAgo / 60)} min ago`;
+    if (secondsAgo < 86400)
+      return `${Math.floor(secondsAgo / 3600)} hour${
+        Math.floor(secondsAgo / 3600) > 1 ? "s" : ""
+      } ago`;
+    if (secondsAgo < 2592000)
+      return `${Math.floor(secondsAgo / 86400)} day${
+        Math.floor(secondsAgo / 86400) > 1 ? "s" : ""
+      } ago`;
+    if (secondsAgo < 31536000)
+      return `${Math.floor(secondsAgo / 2592000)} month${
+        Math.floor(secondsAgo / 2592000) > 1 ? "s" : ""
+      } ago`;
+
+    return `${Math.floor(secondsAgo / 31536000)} year${
+      Math.floor(secondsAgo / 31536000) > 1 ? "s" : ""
+    } ago`;
+  };
 
   return (
     <div>
@@ -111,39 +137,39 @@ function ShopProfileData({ isOwner }) {
 
       <div>
         {active === 3 && (
-          // <div className="w-full">
-          //   {allReviews &&
-          //     allReviews.map((item, index) => (
-          //       <div className="w-full flex my-4" key={index}>
-          //         <img
-          //           src={`${item.user.avatar?.url}`}
-          //           className="w-[50px] h-[50px] rounded-full"
-          //           alt=""
-          //         />
-          //         <div className="pl-2">
-          //           <div className="flex w-full items-center">
-          //             <h1 className="pr-2 font-[600]">{item.user.name}</h1>
-          //             <Ratings ratings={item.ratings} />
-          //           </div>
-          //           <p className="font-[400] text-[#000000a7]">
-          //             {item?.comment}
-          //           </p>
-          //           <p className="text-[#000000a7] text-[14px]">
-          //             {"2days ago"}
-          //           </p>
-          //         </div>
-          //       </div>
-          //     ))}
-          //   {allReviews && allReviews.length === 0 && (
-          //     <h5 className="w-full text-center py-5 text-[18px]">
-          //       No reviews yet for this shop!
-          //     </h5>
-          //   )}
-          // </div>
-          // REMOVE THE FOLLOWING DIV AFTER IMPLEMENTING THE ABOVE CODE
-          <div className="w-full flex items-center justify-center h-[50vh]">
-            <h1>Reviews are to be implemented yet.</h1>
+          <div className="w-full">
+            {allReviews &&
+              allReviews.map((item, index) => (
+                <div className="w-full flex my-4" key={index}>
+                  <img
+                    src={`${backendUrl}${item?.user?.avatar?.url}`}
+                    className="w-[50px] h-[50px] rounded-full"
+                    alt=""
+                  />
+                  <div className="pl-2">
+                    <div className="flex w-full items-center">
+                      <h1 className="pr-2 font-[600]">{item.user.name}</h1>
+                      <Ratings rating={item.rating} />
+                    </div>
+                    <p className="font-[400] text-[#000000a7]">
+                      {item?.comment}
+                    </p>
+                    <p className="text-[#000000a7] text-[14px]">
+                      {timeAgo(item?.createdAt)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            {allReviews && allReviews.length === 0 && (
+              <h5 className="w-full text-center py-5 text-[18px]">
+                No reviews yet for this shop!
+              </h5>
+            )}
           </div>
+          // REMOVE THE FOLLOWING DIV AFTER IMPLEMENTING THE ABOVE CODE
+          // <div className="w-full flex items-center justify-center h-[50vh]">
+          //   <h1>Reviews are to be implemented yet.</h1>
+          // </div>
         )}
       </div>
     </div>

@@ -124,45 +124,52 @@ function ShopOrderDetails() {
       <br />
       <br />
       <h4 className="pt-3 text-[20px] font-[600]">Order Status:</h4>
-      {data &&
-        data?.status !== "Refund Processing" &&
-        data?.status !== "Refund Successful" && (
-          <select
-            name=""
-            id=""
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
-          >
-            {["Processing", "Shipped", "Delivered"]
-              .slice(
-                ["Processing", "Shipped", "Delivered"].indexOf(data?.status)
-              )
-              .map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              ))}
-          </select>
-        )}
+      {data && (
+        <>
+          {!["Refund Processing", "Refund Successful"].includes(
+            data?.status
+          ) ? (
+            <select
+              name=""
+              id=""
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
+            >
+              {["Processing", "Shipped", "Delivered"]
+                .slice(
+                  ["Processing", "Shipped", "Delivered"].indexOf(data?.status)
+                )
+                .map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
+            </select>
+          ) : (
+            <select
+              name=""
+              id=""
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
+            >
+              {["Refund Processing", "Refund Successful"]
+                .slice(
+                  ["Refund Processing", "Refund Successful"].indexOf(
+                    data?.status
+                  )
+                )
+                .map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
+            </select>
+          )}
+        </>
+      )}
 
-      <select
-        name=""
-        id=""
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-        className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
-      >
-        {["Refund Processing", "Refund Successful"]
-          .slice(
-            ["Refund Processing", "Refund Successful"].indexOf(data?.status)
-          )
-          .map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-      </select>
       <div
         className={`${styles.button} !bg-[#fce1e6] !rounded-[4px] text-[#e94560] font-[600] !h-[45px] text-[18px]`}
         onClick={

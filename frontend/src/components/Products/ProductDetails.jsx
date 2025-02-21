@@ -91,6 +91,7 @@ function ProductDetails({ data }) {
     dispatch(removeFromWishlistThunk(data));
   };
 
+  console.log(data?.shop?.avatar?.url);
   return (
     <div className="bg-white">
       {data ? (
@@ -194,8 +195,7 @@ function ProductDetails({ data }) {
                       </h3>
                     </Link>
                     <h5 className={`pb-3 text-[15px]`}>
-                      {/* ({data.shop.ratings}) Ratings */}
-                      (4/5) Ratings
+                      ({avgRatings}/5) Ratings
                     </h5>
                   </div>
                   <div

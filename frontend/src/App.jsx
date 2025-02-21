@@ -37,6 +37,7 @@ import {
   ShopRefundsPage,
   ShopSettingsPage,
   WithdrawMoneyPage,
+  ShopInboxPage,
 } from "./routes/shopRoutes/shopRoutes.js";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./routes/protectedRoutes/ProtectedRoute.jsx";
@@ -233,6 +234,14 @@ function App() {
             element={
               <SellerProtectedRoute>
                 <WithdrawMoneyPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/messages"
+            element={
+              <SellerProtectedRoute>
+                <ShopInboxPage />
               </SellerProtectedRoute>
             }
           />
