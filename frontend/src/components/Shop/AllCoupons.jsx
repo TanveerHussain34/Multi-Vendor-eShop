@@ -139,7 +139,7 @@ function AllCoupons() {
           />
           {open && (
             <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex justify-center items-center">
-              <div className="w-[90%] 800px:w-[40%] h-[85vh] bg-white rounded-md shadow p-4 overflow-y-scroll">
+              <div className="w-[90%] 800px:w-[40%] h-[85vh] bg-white rounded-md shadow p-4 overflow-y-scroll scrollbar-hide">
                 <div className="w-full flex justify-end">
                   <RxCross1
                     size={30}

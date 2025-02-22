@@ -87,7 +87,7 @@ function CreateEvent() {
   };
 
   return (
-    <div className="w-[90vh] 800px:w-[50%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
+    <div className="w-[90vh] 800px:w-[50%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll scrollbar-hide">
       <h5 className="text-[30px] font-Poppins text-center">Create Event</h5>
       {/* create event form */}
       <form onSubmit={handleSubmit}>

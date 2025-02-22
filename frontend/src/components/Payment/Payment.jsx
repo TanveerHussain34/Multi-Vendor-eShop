@@ -336,7 +336,7 @@ const PaymentInfo = ({
             </div>
             {open && (
               <div className="w-full fixed top-0 left-0 bg-[#00000039] h-screen flex items-center justify-center z-[99999]">
-                <div className="w-full 800px:w-[40%] h-screen 800px:h-[80vh] bg-white rounded-[5px] shodow flex flex-col justify-center p-8 relative overflow-y-scroll">
+                <div className="w-full 800px:w-[40%] h-screen 800px:h-[80vh] bg-white rounded-[5px] shodow flex flex-col justify-center p-8 relative overflow-y-scroll scrollbar-hide">
                   <div className="w-full flex justify-end">
                     <RxCross1
                       size={30}

@@ -52,7 +52,7 @@ function Cart({ setOpenCart }) {
               </div>
 
               {/* cart single item */}
-              <div className="flex-1 overflow-y-auto max-h-[calc(100vh-175px)]">
+              <div className="flex-1 overflow-y-auto scrollbar-hide max-h-[calc(100vh-175px)]">
                 <div className="w-full border-t">
                   {cart &&
                     cart.map((i, index) => (

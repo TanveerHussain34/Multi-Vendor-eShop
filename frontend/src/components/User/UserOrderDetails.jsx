@@ -125,7 +125,7 @@ function UserOrderDetails() {
       {/* review popup */}
       {open && (
         <div className="w-full fixed top-0 left-0 h-screen bg-[#0005] z-50 flex items-center justify-center">
-          <div className="w-[50%] h-[90vh] bg-white shadow rounded-md p-3 overflow-y-scroll overflow-x-hidden">
+          <div className="w-[50%] h-[90vh] bg-white shadow rounded-md p-3 overflow-y-scroll scrollbar-hide overflow-x-hidden">
             <div className="w-full flex justify-end p-3">
               <RxCross1
                 size={30}
